@@ -5,6 +5,9 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { HeroMotorPathJourney } from '@/components/sections/HeroMotorPathJourney';
 import { AboutSection } from '@/components/sections/AboutSection';
+import { JourneyStorySection } from '@/components/sections/JourneyStorySection';
+import { ValuesEcosystemSection } from '@/components/sections/ValuesEcosystemSection';
+import { CenterTimelineSection } from '@/components/sections/CenterTimelineSection';
 import { LoadingScreen } from '@/components/layout/LoadingScreen';
 import { Navbar } from '@/components/layout/Navbar';
 import { useStore } from '@/lib/store';
@@ -40,6 +43,9 @@ export default function HomePage() {
       <main className="relative">
         <HeroMotorPathJourney />
         <AboutSection />
+        <JourneyStorySection />
+        <ValuesEcosystemSection />
+        <CenterTimelineSection />
       </main>
     </>
   );
