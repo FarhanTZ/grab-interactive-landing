@@ -12,6 +12,13 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
   const setPrefersReducedMotion = useStore((s) => s.setPrefersReducedMotion);
 
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+      }
+      window.scrollTo(0, 0);
+    }
+
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     const onChange = (e: MediaQueryListEvent | MediaQueryList) => {
       setPrefersReducedMotion(e.matches);
