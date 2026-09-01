@@ -6,7 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { MotionPathPlugin } from 'gsap/MotionPathPlugin';
 import { JOURNEY_STEPS } from '@/lib/constants';
 import { useStore } from '@/lib/store';
-import { MapPin, Navigation, CheckCircle2, Clock3, Car, UtensilsCrossed, ShoppingCart, Package, Wallet } from 'lucide-react';
+import { MapPin, Navigation, CheckCircle2, Clock3 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const stepIcons = { MapPin, Navigation, CheckCircle2 };
@@ -102,27 +102,6 @@ export function HeroMotorPathJourney() {
       className="relative h-[100vh] w-screen overflow-hidden bg-surface"
       style={{ height: '100vh', width: '100vw', willChange: 'transform', backfaceVisibility: 'hidden' }}
     >
-      {/* NAVBAR VERTICAL KIRI - khusus hero */}
-      <nav className="absolute left-3 top-1/2 z-30 hidden -translate-y-1/2 flex-col items-center gap-3 rounded-[28px] border bg-surface-container/90 px-2.5 py-5 shadow-[0_12px_40px_rgba(0,0,0,0.12)] backdrop-blur-xl md:flex" style={{ borderColor: 'var(--theme-border)' }}>
-        <a href="#" className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-[11px] font-extrabold text-white shadow">G</a>
-        <div className="h-[1px] w-6 bg-black/10" />
-        {[
-          { label: 'Ride', icon: Car, href: '#ride' },
-          { label: 'Food', icon: UtensilsCrossed, href: '#food' },
-          { label: 'Mart', icon: ShoppingCart, href: '#mart' },
-          { label: 'Express', icon: Package, href: '#express' },
-          { label: 'Pay', icon: Wallet, href: '#pay' },
-        ].map((it) => (
-          <a key={it.label} href={it.href} className="group flex flex-col items-center gap-1">
-            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-surface text-on-surface-variant transition group-hover:bg-primary group-hover:text-white">
-              <it.icon className="h-4 w-4" />
-            </span>
-            <span className="text-[9px] font-extrabold tracking-widest text-on-surface-variant group-hover:text-primary" style={{ writingMode: 'vertical-rl' }}>{it.label.toUpperCase()}</span>
-          </a>
-        ))}
-        <div className="h-[1px] w-6 bg-black/10" />
-        <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-      </nav>
       {/* MAP - FULL LAYAR */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-surface">

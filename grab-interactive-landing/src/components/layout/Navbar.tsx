@@ -1,94 +1,247 @@
 'use client';
 
-import Link from 'next/link';
+import { useLayoutEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import {
+  Car,
+  UtensilsCrossed,
+  ShoppingCart,
+  Package,
+  Wallet,
+  ArrowUp,
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Container } from '@/components/common/Container';
-import { Button } from '@/components/common/Button';
-import { Menu, X } from 'lucide-react';
-import { useState } from 'react';
 import { useStore } from '@/lib/store';
 
-const navLinks = [
-  { label: 'Ride', href: '#ride', service: 'ride' as const },
-  { label: 'Food', href: '#food', service: 'food' as const },
-  { label: 'Mart', href: '#mart', service: 'mart' as const },
-  { label: 'Express', href: '#express', service: 'express' as const },
-  { label: 'Finance', href: '#pay', service: 'pay' as const },
+gsap.registerPlugin(ScrollTrigger);
+
+const NAV_ITEMS = [
+  { id: 'ride', label: 'Ride', icon: Car, href: '#journey-trigger' },
+  { id: 'food', label: 'Food', icon: UtensilsCrossed, href: '#about' },
+  { id: 'mart', label: 'Mart', icon: ShoppingCart, href: '#about' },
+  { id: 'express', label: 'Express', icon: Package, href: '#about' },
+  { id: 'pay', label: 'Pay', icon: Wallet, href: '#about' },
 ];
 
 export function Navbar() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<string>('ride');
   const activeService = useStore((s) => s.activeService);
   const setActiveService = useStore((s) => s.setActiveService);
 
-  const handleNavClick = (service: typeof navLinks[number]['service']) => {
-    setActiveService(service);
-    // scroll via Lenis if available, else native
-    const el = document.getElementById('section-services');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const heroNavRef = useRef<HTMLElement>(null);
+  const bottomNavRef = useRef<HTMLElement>(null);
+
+  useLayoutEffect(() => {
+    const heroNav = heroNavRef.current;
+    const bottomNav = bottomNavRef.current;
+    if (!heroNav || !bottomNav) return;
+
+    // Set initial GSAP states
+    gsap.set(heroNav, { opacity: 1, x: 0, yPercent: -50, scale: 1, pointerEvents: 'auto' });
+    gsap.set(bottomNav, { opacity: 0, y: 40, xPercent: -50, scale: 0.88, pointerEvents: 'none' });
+
+    const ctx = gsap.context(() => {
+      // Timeline scrubbed directly to the scroll between Hero exit and About entry
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: '#about',
+          start: 'top 85%',
+          end: 'top 20%',
+          scrub: 1.2,
+          onUpdate: (self) => {
+            // Enable pointer events appropriately based on progress
+            if (self.progress > 0.5) {
+              heroNav.style.pointerEvents = 'none';
+              bottomNav.style.pointerEvents = 'auto';
+            } else {
+              heroNav.style.pointerEvents = 'auto';
+              bottomNav.style.pointerEvents = 'none';
+            }
+          },
+        },
+      });
+
+      // 1. Hero vertical nav smoothly glides downward-left and fades out with easing
+      tl.to(
+        heroNav,
+        {
+          opacity: 0,
+          x: -24,
+          yPercent: 20,
+          scale: 0.85,
+          ease: 'power2.inOut',
+          duration: 1,
+        },
+        0
+      );
+
+      // 2. Bottom horizontal dock seamlessly glides up into center position and scales in
+      tl.to(
+        bottomNav,
+        {
+          opacity: 1,
+          y: 0,
+          xPercent: -50,
+          scale: 1,
+          ease: 'power2.out',
+          duration: 1,
+        },
+        0.15
+      );
+    });
+
+    return () => ctx.revert();
+  }, []);
+
+  const handleItemClick = (item: (typeof NAV_ITEMS)[number]) => {
+    setActiveTab(item.id);
+    if (['ride', 'food', 'mart', 'express', 'pay'].includes(item.id)) {
+      setActiveService(item.id as any);
+    }
+
+    if (item.href === '#journey-trigger') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      const el = document.querySelector(item.href);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 border-b border-white/8 bg-surface/40 backdrop-blur-2xl">
-      <Container className="flex h-20 items-center justify-between">
-        <Link href="#" className="font-bold text-2xl text-primary">
-          Grab
-        </Link>
+    <>
+      {/* 1. HERO VERTICAL DOCK (Sisi Kiri Layar - Smooth Scrub) */}
+      <nav
+        ref={heroNavRef}
+        id="navbar-vertical-hero"
+        aria-label="Hero Side Navigation"
+        className="fixed left-3 md:left-5 top-1/2 z-50 hidden sm:flex flex-col items-center gap-3 rounded-[30px] border border-black/10 bg-surface-container/90 px-2.5 py-4 shadow-[0_12px_40px_rgba(0,0,0,0.14)] backdrop-blur-2xl dark:border-white/10"
+        style={{ willChange: 'transform, opacity' }}
+      >
+        {/* LOGO 'G' */}
+        <button
+          type="button"
+          onClick={scrollToTop}
+          title="Kembali ke atas"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-black text-white shadow-md transition-transform hover:scale-105 active:scale-95"
+        >
+          G
+        </button>
 
-        <div className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <button
-              key={link.label}
-              onClick={() => handleNavClick(link.service)}
-              className={cn(
-                'text-sm font-semibold transition-colors duration-300',
-                link.service === activeService ? 'text-primary border-b-2 border-primary pb-1' : 'text-on-surface-variant hover:text-primary',
-              )}
-            >
-              {link.label}
-            </button>
-          ))}
-        </div>
+        <div className="h-[1px] w-6 bg-black/10 dark:bg-white/15" />
 
-        <div className="flex items-center gap-4">
-          <Button variant="primary" size="md" className="hidden sm:inline-flex">
-            Download App
-          </Button>
-          <button
-            type="button"
-            aria-label="Toggle menu"
-            aria-expanded={mobileMenuOpen}
-            className="md:hidden text-on-surface focus:outline-none"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
-      </Container>
+        {/* ITEMS */}
+        <div className="flex flex-col items-center gap-2.5">
+          {NAV_ITEMS.map((item) => {
+            const Icon = item.icon;
+            const isCurrentActive = activeTab === item.id || activeService === item.id;
 
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-surface/95 backdrop-blur-xl border-t border-white/8">
-          <div className="container mx-auto flex flex-col gap-1 py-4">
-            {navLinks.map((link) => (
+            return (
               <button
-                key={link.label}
-                onClick={() => {
-                  handleNavClick(link.service);
-                  setMobileMenuOpen(false);
-                }}
+                key={item.id}
+                type="button"
+                onClick={() => handleItemClick(item)}
+                title={item.label}
+                className="group relative flex flex-col items-center gap-1 rounded-2xl p-1 transition-colors hover:text-primary"
+              >
+                <span
+                  className={cn(
+                    'flex h-9 w-9 items-center justify-center rounded-full shadow-sm transition-all duration-300',
+                    isCurrentActive
+                      ? 'bg-primary text-white'
+                      : 'bg-surface text-on-surface-variant group-hover:bg-primary group-hover:text-white'
+                  )}
+                >
+                  <Icon className="h-4 w-4" />
+                </span>
+                <span
+                  className="text-[9px] font-extrabold tracking-widest text-on-surface-variant group-hover:text-primary"
+                  style={{ writingMode: 'vertical-rl' }}
+                >
+                  {item.label.toUpperCase()}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="h-[1px] w-6 bg-black/10 dark:bg-white/15" />
+
+        {/* PULSE INDICATOR */}
+        <span
+          className="h-2 w-2 rounded-full bg-primary animate-pulse"
+          title="Live GPS Active"
+        />
+      </nav>
+
+      {/* 2. ABOUT HORIZONTAL DOCK (Tengah Bawah Layar - Smooth Scrub) */}
+      <nav
+        ref={bottomNavRef}
+        id="navbar-horizontal-about"
+        aria-label="About Bottom Navigation"
+        className="fixed bottom-5 md:bottom-7 left-1/2 z-50 flex flex-row items-center gap-1.5 md:gap-2.5 rounded-full border border-black/10 bg-white/95 px-3 py-2 md:px-5 md:py-2.5 shadow-[0_20px_50px_rgba(0,0,0,0.22)] backdrop-blur-2xl dark:border-white/10 dark:bg-[#0E1E14]/95 max-w-[95vw]"
+        style={{ willChange: 'transform, opacity' }}
+      >
+        {/* LOGO 'G' */}
+        <button
+          type="button"
+          onClick={scrollToTop}
+          title="Kembali ke atas"
+          className="flex h-8 w-8 md:h-9 md:w-9 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-black text-white shadow-md transition-transform hover:scale-105 active:scale-95"
+        >
+          G
+        </button>
+
+        <div className="h-5 w-[1px] mx-0.5 bg-black/10 dark:bg-white/15" />
+
+        {/* ITEMS */}
+        <div className="flex flex-row items-center gap-1 md:gap-1.5">
+          {NAV_ITEMS.map((item) => {
+            const Icon = item.icon;
+            const isCurrentActive = activeTab === item.id || activeService === item.id;
+
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => handleItemClick(item)}
+                title={item.label}
                 className={cn(
-                  'px-6 py-3 text-left text-sm font-semibold transition-colors',
-                  link.service === activeService ? 'text-primary bg-primary/10' : 'text-on-surface-variant hover:text-primary',
+                  'group relative flex flex-row items-center gap-1.5 rounded-full px-2.5 py-1.5 md:px-3.5 md:py-2 text-xs font-bold transition-all duration-300',
+                  isCurrentActive
+                    ? 'bg-primary text-white shadow-sm'
+                    : 'text-on-surface-variant hover:bg-black/5 hover:text-on-surface dark:hover:bg-white/10 dark:hover:text-white'
                 )}
               >
-                {link.label}
+                <span className="flex h-4 w-4 shrink-0 items-center justify-center">
+                  <Icon className="h-3.5 w-3.5 md:h-4 md:w-4" />
+                </span>
+                <span className="truncate hidden sm:inline-block md:text-xs text-[11px] font-bold">
+                  {item.label}
+                </span>
               </button>
-            ))}
-          </div>
+            );
+          })}
         </div>
-      )}
-    </nav>
+
+        <div className="h-5 w-[1px] mx-0.5 bg-black/10 dark:bg-white/15" />
+
+        {/* SCROLL TO TOP BUTTON */}
+        <button
+          type="button"
+          onClick={scrollToTop}
+          className="flex h-7 w-7 md:h-8 md:w-8 items-center justify-center rounded-full bg-black/5 text-on-surface-variant transition hover:bg-primary hover:text-white dark:bg-white/10"
+          title="Scroll ke atas"
+        >
+          <ArrowUp className="h-3.5 w-3.5" />
+        </button>
+      </nav>
+    </>
   );
 }
