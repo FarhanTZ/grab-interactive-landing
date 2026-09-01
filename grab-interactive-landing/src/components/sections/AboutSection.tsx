@@ -209,13 +209,24 @@ export function AboutSection() {
             <span className="h-2 w-2 rounded-full bg-primary animate-pulse" /> 02 — TENTANG GRAB
           </div>
 
-          <h2 className="about-title mt-4 max-w-full text-[32px] font-extrabold leading-[1.15] tracking-tight text-white md:text-[50px]">
-            <span className="line block overflow-hidden"><span className="block py-1">Satu aplikasi untuk</span></span>
-            <span className="line block overflow-hidden"><span className="block py-1 text-white">semua kebutuhan</span></span>
-            <span className="line block overflow-hidden"><span className="block py-1 text-white/90">sehari-hari.</span></span>
-          </h2>
+          <div className="mt-4 flex flex-col gap-6 md:flex-row md:items-center md:justify-between md:gap-8">
+            <h2 className="about-title max-w-full flex-1 text-[32px] font-extrabold leading-[1.15] tracking-tight text-white md:text-[50px]">
+              <span className="line block overflow-hidden"><span className="block py-1">Satu aplikasi untuk</span></span>
+              <span className="line block overflow-hidden"><span className="block py-1 text-white">semua kebutuhan</span></span>
+              <span className="line block overflow-hidden"><span className="block py-1 text-white/90">sehari-hari.</span></span>
+            </h2>
+            {/* gambar grab di samping title - lingkaran besar */}
+            <div className="about-image shrink-0 overflow-hidden rounded-full border-[ border-white/90 bg-white shadow-[0_16px_50px_rgba(0,0,0,0.22)] h-[280px] w-[280px] md:h-[400px] md:w-[400px]">
+              <img
+                src="/images/grab.png"
+                alt="Grab Superapp"
+                className="h-full w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          </div>
 
-          <p className="about-desc mt-4 max-w-xl leading-relaxed text-white/85 md:text-base">
+          <p className="about-desc mt-6 max-w-xl leading-relaxed text-white/85 md:text-base">
             Lahir sebagai <b className="text-white">MyTeksi</b> pada 2012 oleh Anthony Tan &amp; Tan Hooi Ling, Grab kini adalah superapp
             terbesar di Asia Tenggara — menghubungkan jutaan penumpang, mitra pengemudi &amp; UMKM dalam satu ekosistem.
             Dari antar-jemput hingga finansial, semua ada dalam genggaman.

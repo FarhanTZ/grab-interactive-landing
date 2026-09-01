@@ -108,8 +108,8 @@ export function HeroMotorPathJourney() {
           <div className="absolute inset-0" style={{ backgroundImage: `linear-gradient(to right, var(--theme-grid) 1px, transparent 1px), linear-gradient(to bottom, var(--theme-grid) 1px, transparent 1px)`, backgroundSize: '56px 56px' }} />
           <div className="pointer-events-none absolute left-1/2 top-1/2 h-[900px] w-[900px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/[0.07] blur-[80px]" />
           <svg className="absolute inset-0 h-full w-full" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid meet">
-            <path d="M 880,120 C 880,520 580,420 500,500 C 420,580 120,480 120,850" fill="none" stroke="var(--theme-road-inactive)" strokeWidth="22" strokeLinecap="round" strokeLinejoin="round" />
-            <path ref={activePathRef} id="route-active" d="M 880,120 C 880,520 580,420 500,500 C 420,580 120,480 120,850" fill="none" stroke="#00B14F" strokeWidth="22" strokeLinecap="round" strokeLinejoin="round" style={{ filter: 'drop-shadow(0 0 18px rgba(0,177,79,0.5))' }} />
+            <path d="M 880,120 C 880,500 120,470 120,850" fill="none" stroke="var(--theme-road-inactive)" strokeWidth="22" strokeLinecap="round" strokeLinejoin="round" />
+            <path ref={activePathRef} id="route-active" d="M 880,120 C 880,500 120,470 120,850" fill="none" stroke="#00B14F" strokeWidth="22" strokeLinecap="round" strokeLinejoin="round" style={{ filter: 'drop-shadow(0 0 18px rgba(0,177,79,0.5))' }} />
             <circle cx="880" cy="120" r="22" fill="var(--theme-road-dot)" stroke="#00B14F" strokeWidth="7" />
             <circle cx="120" cy="850" r="22" fill="var(--theme-road-dot)" stroke="#00B14F" strokeWidth="7" />
             <circle cx="880" cy="120" r="7" fill="#fff" />
