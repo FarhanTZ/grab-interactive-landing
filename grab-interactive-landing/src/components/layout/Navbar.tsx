@@ -1,8 +1,7 @@
 'use client';
 
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import {
   Car,
   UtensilsCrossed,
@@ -13,8 +12,6 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useStore } from '@/lib/store';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const NAV_ITEMS = [
   { id: 'ride', label: 'Ride', icon: Car, href: '#journey-trigger' },
@@ -28,70 +25,74 @@ export function Navbar() {
   const [activeTab, setActiveTab] = useState<string>('ride');
   const activeService = useStore((s) => s.activeService);
   const setActiveService = useStore((s) => s.setActiveService);
+  const motorProgress = useStore((s) => s.motorProgress);
 
   const heroNavRef = useRef<HTMLElement>(null);
   const bottomNavRef = useRef<HTMLElement>(null);
 
+  // Smooth interpolation transition based directly on motorProgress / arrival
   useLayoutEffect(() => {
     const heroNav = heroNavRef.current;
     const bottomNav = bottomNavRef.current;
     if (!heroNav || !bottomNav) return;
 
-    // Set initial GSAP states
-    gsap.set(heroNav, { opacity: 1, x: 0, yPercent: -50, scale: 1, pointerEvents: 'auto' });
-    gsap.set(bottomNav, { opacity: 0, y: 40, xPercent: -50, scale: 0.88, pointerEvents: 'none' });
+    // Hitung rasio transisi:
+    // Selama di Hero (motorProgress < 0.88): ratio = 0 (100% di kiri)
+    // Saat motor sampai & About masuk (motorProgress 0.88 s/d 1.0): ratio meluncur mulus 0 -> 1
+    const p = Math.max(0, Math.min(1, motorProgress));
+    let ratio = 0;
+    if (p >= 0.88) {
+      ratio = (p - 0.88) / 0.12;
+    }
 
-    const ctx = gsap.context(() => {
-      // Timeline scrubbed directly to the scroll between Hero exit and About entry
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: '#about',
-          start: 'top 85%',
-          end: 'top 20%',
-          scrub: 1.2,
-          onUpdate: (self) => {
-            // Enable pointer events appropriately based on progress
-            if (self.progress > 0.5) {
-              heroNav.style.pointerEvents = 'none';
-              bottomNav.style.pointerEvents = 'auto';
-            } else {
-              heroNav.style.pointerEvents = 'auto';
-              bottomNav.style.pointerEvents = 'none';
-            }
-          },
-        },
-      });
-
-      // 1. Hero vertical nav smoothly glides downward-left and fades out with easing
-      tl.to(
-        heroNav,
-        {
-          opacity: 0,
-          x: -24,
-          yPercent: 20,
-          scale: 0.85,
-          ease: 'power2.inOut',
-          duration: 1,
-        },
-        0
-      );
-
-      // 2. Bottom horizontal dock seamlessly glides up into center position and scales in
-      tl.to(
-        bottomNav,
-        {
-          opacity: 1,
-          y: 0,
-          xPercent: -50,
-          scale: 1,
-          ease: 'power2.out',
-          duration: 1,
-        },
-        0.15
-      );
+    // Gunakan gsap.to dengan easing halus agar pergerakannya responsif dan super smooth
+    gsap.to(heroNav, {
+      opacity: 1 - ratio,
+      x: -24 * ratio,
+      yPercent: -50 + 20 * ratio,
+      scale: 1 - 0.15 * ratio,
+      duration: 0.35,
+      ease: 'power2.out',
+      overwrite: 'auto',
     });
 
-    return () => ctx.revert();
+    gsap.to(bottomNav, {
+      opacity: ratio,
+      y: 40 * (1 - ratio),
+      scale: 0.88 + 0.12 * ratio,
+      xPercent: -50,
+      duration: 0.35,
+      ease: 'power2.out',
+      overwrite: 'auto',
+    });
+
+    if (ratio > 0.5) {
+      heroNav.style.pointerEvents = 'none';
+      bottomNav.style.pointerEvents = 'auto';
+    } else {
+      heroNav.style.pointerEvents = 'auto';
+      bottomNav.style.pointerEvents = 'none';
+    }
+  }, [motorProgress]);
+
+  // Handler untuk scroll lanjutan setelah hero unpin
+  useEffect(() => {
+    const handleScroll = () => {
+      const heroNav = heroNavRef.current;
+      const bottomNav = bottomNavRef.current;
+      if (!heroNav || !bottomNav) return;
+
+      // Jika sudah scroll jauh di bawah hero (misal scrollY > 3100)
+      if (window.scrollY >= 3000) {
+        gsap.to(heroNav, { opacity: 0, scale: 0.85, x: -24, duration: 0.2, overwrite: 'auto' });
+        gsap.to(bottomNav, { opacity: 1, y: 0, scale: 1, duration: 0.2, overwrite: 'auto' });
+        heroNav.style.pointerEvents = 'none';
+        bottomNav.style.pointerEvents = 'auto';
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const handleItemClick = (item: (typeof NAV_ITEMS)[number]) => {
@@ -116,7 +117,7 @@ export function Navbar() {
 
   return (
     <>
-      {/* 1. HERO VERTICAL DOCK (Sisi Kiri Layar - Smooth Scrub) */}
+      {/* 1. HERO VERTICAL DOCK (Sisi Kiri Layar - Aktif di Hero) */}
       <nav
         ref={heroNavRef}
         id="navbar-vertical-hero"
@@ -180,7 +181,7 @@ export function Navbar() {
         />
       </nav>
 
-      {/* 2. ABOUT HORIZONTAL DOCK (Tengah Bawah Layar - Smooth Scrub) */}
+      {/* 2. ABOUT HORIZONTAL DOCK (Tengah Bawah Layar - Aktif di About) */}
       <nav
         ref={bottomNavRef}
         id="navbar-horizontal-about"
