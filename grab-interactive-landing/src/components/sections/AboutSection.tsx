@@ -216,17 +216,17 @@ export function AboutSection() {
               <span className="line block overflow-hidden"><span className="block py-1 text-white/90">sehari-hari.</span></span>
             </h2>
             {/* gambar grab di samping title - lingkaran besar */}
-            <div className="about-image shrink-0 overflow-hidden rounded-full border-[ border-white/90 bg-white shadow-[0_16px_50px_rgba(0,0,0,0.22)] h-[280px] w-[280px] md:h-[400px] md:w-[400px]">
+            <div className="about-image shrink-0 overflow-hidden rounded-full border-white/90 bg-white shadow-[0_16px_50px_rgba(0,0,0,0.22)] h-[100px] w-[100px] md:h-[400px] md:w-[400px]">
               <img
                 src="/images/grab.png"
                 alt="Grab Superapp"
-                className="h-full w-full object-cover"
+                className="h- w-full object-cover"
                 loading="lazy"
               />
             </div>
           </div>
 
-          <p className="about-desc mt-6 max-w-xl leading-relaxed text-white/85 md:text-base">
+          <p className="about-desc mt-1 max-w-xl leading-relaxed text-white/85 md:text-base">
             Lahir sebagai <b className="text-white">MyTeksi</b> pada 2012 oleh Anthony Tan &amp; Tan Hooi Ling, Grab kini adalah superapp
             terbesar di Asia Tenggara — menghubungkan jutaan penumpang, mitra pengemudi &amp; UMKM dalam satu ekosistem.
             Dari antar-jemput hingga finansial, semua ada dalam genggaman.
