@@ -140,7 +140,7 @@ export function AboutSection() {
             {/* Gambar Grab */}
             <div className="about-image shrink-0 overflow-hidden rounded-full border-4 border-white/90 bg-white shadow-[0_16px_50px_rgba(0,0,0,0.22)] h-[120px] w-[120px] md:h-[260px] md:w-[260px]">
               <img
-                src="/images/grab.png"
+                src="/images/assets_grab/grab.png"
                 alt="Grab Superapp"
                 className="h-full w-full object-cover"
                 loading="lazy"

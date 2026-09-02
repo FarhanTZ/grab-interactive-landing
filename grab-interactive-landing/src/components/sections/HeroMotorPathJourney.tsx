@@ -111,16 +111,14 @@ export function HeroMotorPathJourney() {
       // Inisialisasi posisi dan opacity card & map blur (jernih tanpa blur di awal)
       gsap.set('#hero-map-layer', { filter: 'none', opacity: 1 });
       gsap.set('#hero-intro', { opacity: 1, y: 0 });
-      gsap.set('#center-hint', { opacity: 1, y: 0, xPercent: -50 });
       gsap.set('#on-way-callout', { opacity: 0, scale: 0.92, y: 24 });
       gsap.set('#arrive-popup', { opacity: 0, scale: 0.85, yPercent: -50 });
       gsap.set('#hero-step-0', { opacity: 1, y: 0, scale: 1 });
       gsap.set('#hero-step-1', { opacity: 0.72, y: 0, scale: 1 });
       gsap.set('#hero-step-2', { opacity: 0.72, y: 0, scale: 1 });
 
-      // 1. Intro text & hint hilang begitu mulai scroll (p: 0.08 s/d 0.20)
+      // 1. Intro text hilang begitu mulai scroll (p: 0.08 s/d 0.20)
       tl.to('#hero-intro', { opacity: 0, y: -28, duration: 0.14, ease: 'power2.in' }, 0.08);
-      tl.to('#center-hint', { opacity: 0, y: 16, duration: 0.12, ease: 'power2.in' }, 0.08);
 
       // 2. Card 0 (01 Penjemputan) MENGHILANG saat motor melaju meninggalkan titik awal (p: 0.28)
       tl.to('#hero-step-0', { opacity: 0, y: -18, scale: 0.92, duration: 0.12, ease: 'power2.in' }, 0.28);
@@ -194,20 +192,18 @@ export function HeroMotorPathJourney() {
 
       {/* INTRO TEXT - awal, di atas peta, hilang pas scroll */}
       <div id="hero-intro" className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center px-6 text-center">
-        <div className="inline-flex items-center gap-2 rounded-full border bg-surface-container px-3.5 py-1.5 text-xs font-bold tracking-widest text-primary shadow-sm" style={{ borderColor: 'var(--theme-border)' }}>
-          <span className="h-2 w-2 rounded-full bg-primary animate-pulse" /> GRAB SUPERAPP • INDONESIA
+        <div className="mb-4 flex items-center justify-center">
+          <img
+            src="/images/assets_grab/grab_logo.png"
+            alt="Grab Logo"
+            className="h-10 md:h-14 w-auto object-contain drop-shadow-sm"
+          />
         </div>
-        <h1 className="mt-4 max-w-3xl text-3xl font-extrabold leading-[1.05] tracking-tight text-on-surface md:text-5xl">
+        <h1 className="max-w-3xl text-3xl font-extrabold leading-[1.05] tracking-tight text-on-surface md:text-5xl">
           Dari layanan kebutuhan<br />
           sehari-hari hingga peluang<br />
           <span className="bg-gradient-to-r from-primary to-emerald-600 bg-clip-text text-transparent">penghasilan. Satu aplikasi serbabisa.</span>
         </h1>
-        <p className="mt-4 max-w-xl text-sm leading-relaxed text-on-surface-variant md:text-base">
-          Scroll ke bawah — saksikan motor Grab melaju live di peta GPS dari titik jemput hingga tujuan.
-        </p>
-        <div className="mt-6 flex items-center gap-2 text-xs font-bold text-on-surface-variant">
-          <span className="h-[1px] w-8 bg-primary/40" /> Scroll untuk memulai perjalanan <span className="h-[1px] w-8 bg-primary/40" />
-        </div>
       </div>
 
       {/* TOP: GPS HEADER - overlay */}
@@ -230,16 +226,13 @@ export function HeroMotorPathJourney() {
         </div>
       </div>
 
-      {/* ON THE WAY callout - khusus fase 02 di sisi kiri layar */}
+      {/* ON THE WAY callout - khusus fase 02 di sisi kanan layar */}
       <div
         id="on-way-callout"
-        className="pointer-events-none absolute left-4 sm:left-8 md:left-14 top-[30%] md:top-[34%] z-20 w-[90vw] max-w-[430px]"
+        className="pointer-events-none absolute right-4 sm:right-8 md:right-14 top-[30%] md:top-[34%] z-20 w-[90vw] max-w-[430px]"
       >
         <div className="rounded-[20px] border bg-surface-container px-5 py-4 shadow-[0_16px_40px_rgba(0,0,0,0.16)] backdrop-blur-xl md:px-6 md:py-5" style={{ borderColor: 'var(--theme-border)' }}>
-          <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-extrabold tracking-widest text-primary">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" /> 02 • AI OPTIMAL ROUTE
-          </div>
-          <h3 className="mt-2 text-xl font-extrabold leading-tight text-on-surface md:text-2xl">Melintasi Jalur Tercepat</h3>
+          <h3 className="text-xl font-extrabold leading-tight text-on-surface md:text-2xl">Melintasi Jalur Tercepat</h3>
           <p className="mt-1.5 text-sm leading-relaxed text-on-surface-variant">
             Navigasi AI Grab hindari macet & lampu merah — pilih tikungan paling efisien agar ETA tetap presisi dan baterai hemat.
           </p>
@@ -247,13 +240,6 @@ export function HeroMotorPathJourney() {
             <span className="rounded-full bg-primary px-2.5 py-1 text-xs font-bold text-white">Hemat 4 menit</span>
             <span className="rounded-full border bg-surface px-2.5 py-1 text-xs font-bold text-on-surface-variant" style={{ borderColor: 'var(--theme-border)' }}>Tanpa tol</span>
           </div>
-        </div>
-      </div>
-
-      {/* CENTER HINT */}
-      <div id="center-hint" className="pointer-events-none absolute bottom-[108px] left-1/2 z-20 md:bottom-[110px]">
-        <div className="flex items-center gap-2 rounded-full border bg-surface-container px-4 py-2 text-xs font-bold text-on-surface-variant shadow-lg backdrop-blur" style={{ borderColor: 'var(--theme-border)' }}>
-          <span className="h-2 w-2 animate-pulse rounded-full bg-primary shadow-[0_0_8px_rgba(0,177,79,0.8)]" /> Scroll untuk menjalankan motor
         </div>
       </div>
 

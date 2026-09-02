@@ -53,11 +53,15 @@ export function LoadingScreen({ onDone }: { onDone?: () => void }) {
       <div className="pointer-events-none absolute left-1/2 top-1/2 h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/10 blur-[60px]" />
 
       <div className="relative flex flex-col items-center">
-        {/* logo circle putih */}
-        <div className="load-logo flex h-[88px] w-[88px] items-center justify-center rounded-full bg-white shadow-[0_12px_40px_rgba(0,0,0,0.18)] md:h-[96px] md:w-[96px]">
-          <span className="text-[28px] font-extrabold tracking-tight text-primary md:text-[30px]">Grab</span>
+        {/* Logo Grab Putih Resmi */}
+        <div className="load-logo flex items-center justify-center">
+          <img
+            src="/images/assets_grab/grab_logo_putih.png"
+            alt="Grab Logo Putih"
+            className="h-14 md:h-18 w-auto object-contain drop-shadow-[0_12px_30px_rgba(0,0,0,0.2)]"
+          />
         </div>
-        <div className="load-text mt-4 text-center">
+        <div className="load-text mt-5 text-center">
           <p className="text-sm font-extrabold tracking-[0.18em] text-white">SUPERAPP • EVERYDAY</p>
           <p className="load-dots mt-1 flex justify-center gap-1 text-xs font-bold text-white/80">
             <span>•</span><span>•</span><span>•</span> Memuat pengalaman
