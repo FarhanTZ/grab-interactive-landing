@@ -10,8 +10,6 @@ import { ValuesEcosystemSection } from '@/components/sections/ValuesEcosystemSec
 import { CenterTimelineSection } from '@/components/sections/CenterTimelineSection';
 import { LoadingScreen } from '@/components/layout/LoadingScreen';
 import { Navbar } from '@/components/layout/Navbar';
-import { StickySectionFocusNav } from '@/components/layout/StickySectionFocusNav';
-import { useStore } from '@/lib/store';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -20,28 +18,22 @@ export default function HomePage() {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      if ('scrollRestoration' in history) {
-        history.scrollRestoration = 'manual';
-      }
       window.scrollTo(0, 0);
-      useStore.getState().setMotorProgress(0);
-      useStore.getState().setActiveJourneyStep(0);
     }
   }, []);
 
   const handleLoaded = () => {
     setLoaded(true);
-    window.scrollTo(0, 0);
+    // Refresh ScrollTrigger setelah loading screen selesai
     setTimeout(() => {
       ScrollTrigger.refresh();
-    }, 100);
+    }, 150);
   };
 
   return (
     <>
       {!loaded && <LoadingScreen onDone={handleLoaded} />}
       <Navbar />
-      <StickySectionFocusNav />
       <main className="relative">
         <HeroMotorPathJourney />
         <AboutSection />

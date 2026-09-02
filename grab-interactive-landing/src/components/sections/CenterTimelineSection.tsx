@@ -1,8 +1,5 @@
 'use client';
 
-import { useLayoutEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import {
   MapPinned,
   Flag,
@@ -15,8 +12,6 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const TIMELINE_STEPS = [
   {
@@ -70,129 +65,10 @@ const TIMELINE_STEPS = [
 ];
 
 export function CenterTimelineSection() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const lineRef = useRef<HTMLDivElement>(null);
-  const trackerRef = useRef<HTMLDivElement>(null);
-
-  useLayoutEffect(() => {
-    const section = sectionRef.current;
-    const line = lineRef.current;
-    const tracker = trackerRef.current;
-    if (!section || !line) return;
-
-    const ctx = gsap.context(() => {
-      // 🚀 Animasi Gerak Ke Atas (Scrub Lift-Up) saat scroll masuk
-      gsap.fromTo(
-        section,
-        { y: 120 },
-        {
-          y: 0,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: section,
-            start: 'top bottom',
-            end: 'top top',
-            scrub: 1.2,
-          },
-        }
-      );
-
-      // 1. Header Animation
-      gsap.fromTo(
-        '.timeline-sec-badge',
-        { y: 25, autoAlpha: 0 },
-        {
-          y: 0,
-          autoAlpha: 1,
-          duration: 0.6,
-          ease: 'power3.out',
-          clearProps: 'all',
-          scrollTrigger: { trigger: section, start: 'top 80%', toggleActions: 'play none none none' },
-        }
-      );
-
-      gsap.fromTo(
-        '.timeline-sec-heading',
-        { y: 35, autoAlpha: 0 },
-        {
-          y: 0,
-          autoAlpha: 1,
-          duration: 0.8,
-          delay: 0.1,
-          ease: 'power3.out',
-          clearProps: 'all',
-          scrollTrigger: { trigger: section, start: 'top 80%', toggleActions: 'play none none none' },
-        }
-      );
-
-      // 2. Garis Tengah Scroll Drawing (scrub animation)
-      const tlLine = gsap.timeline({
-        scrollTrigger: {
-          trigger: '.timeline-track-wrap',
-          start: 'top 70%',
-          end: 'bottom 80%',
-          scrub: 1.2,
-          onUpdate: (self) => {
-            if (tracker) {
-              gsap.set(tracker, { y: self.progress * (line.parentElement?.offsetHeight || 600) });
-            }
-          },
-        },
-      });
-
-      tlLine.fromTo(
-        line,
-        { scaleY: 0 },
-        { scaleY: 1, transformOrigin: 'top center', ease: 'none' }
-      );
-
-      // 3. Staggered card reveal dari Kiri dan Kanan
-      document.querySelectorAll<HTMLElement>('.timeline-row-item').forEach((row, i) => {
-        const isLeft = i % 2 === 0;
-        const card = row.querySelector('.timeline-card-content');
-        const node = row.querySelector('.timeline-center-node');
-
-        if (node) {
-          gsap.fromTo(
-            node,
-            { scale: 0, autoAlpha: 0 },
-            {
-              scale: 1,
-              autoAlpha: 1,
-              duration: 0.5,
-              ease: 'back.out(1.6)',
-              clearProps: 'all',
-              scrollTrigger: { trigger: row, start: 'top 78%', toggleActions: 'play none none none' },
-            }
-          );
-        }
-
-        if (card) {
-          gsap.fromTo(
-            card,
-            { x: isLeft ? -45 : 45, autoAlpha: 0 },
-            {
-              x: 0,
-              autoAlpha: 1,
-              duration: 0.75,
-              ease: 'power3.out',
-              clearProps: 'all',
-              scrollTrigger: { trigger: row, start: 'top 78%', toggleActions: 'play none none none' },
-            }
-          );
-        }
-      });
-    }, section);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
     <section
-      ref={sectionRef}
       id="histori-perjalanan"
-      className="relative z-50 min-h-screen w-full overflow-clip bg-[#F8FAF9] py-20 text-[#0A1A12] flex flex-col justify-center md:py-24"
-      style={{ willChange: 'transform' }}
+      className="relative z-50 min-h-screen w-full overflow-clip -mt-10 md:-mt-16 rounded-t-[36px] md:rounded-t-[48px] bg-[#F8FAF9] py-20 text-[#0A1A12] flex flex-col justify-center md:py-28 shadow-[0_-16px_50px_rgba(0,0,0,0.12)]"
     >
       {/* Background Decorative Patterns */}
       <div className="pointer-events-none absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `linear-gradient(to right, #000 1px, transparent 1px), linear-gradient(to bottom, #000 1px, transparent 1px)`, backgroundSize: '40px 40px' }} />
@@ -201,33 +77,23 @@ export function CenterTimelineSection() {
       <div className="relative mx-auto w-full max-w-[1240px] px-6 md:px-10">
         {/* HEADER */}
         <div className="text-center">
-          <div className="timeline-sec-badge inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-xs font-extrabold tracking-widest text-primary">
+          <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-xs font-extrabold tracking-widest text-primary">
             <Calendar className="h-4 w-4" /> 05 — HISTORI PERJALANAN
           </div>
-          <h2 className="timeline-sec-heading mt-4 text-3xl font-extrabold leading-tight tracking-tight text-[#0A1A12] md:text-[46px]">
+          <h2 className="mt-4 text-3xl font-extrabold leading-tight tracking-tight text-[#0A1A12] md:text-5xl">
             Jejak Langkah Grab<br />
             <span className="text-primary">Dari Masa ke Masa</span>
           </h2>
-          <p className="timeline-sec-heading mx-auto mt-3 max-w-xl text-sm leading-relaxed text-[#5B6B62] md:text-base">
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-[#5B6B62] md:text-base">
             Perjalanan transformasi dari aplikasi pemesanan taksi lokal hingga menjadi superapp mobilitas & finansial nomor satu di Asia Tenggara.
           </p>
         </div>
 
         {/* CENTER TIMELINE CONTAINER */}
-        <div className="timeline-track-wrap relative mt-16 md:mt-24">
+        <div className="relative mt-16 md:mt-24">
           {/* Garis Track Abu-abu di Tengah */}
-          <div className="absolute left-6 top-0 bottom-0 w-[4px] -translate-x-1/2 rounded-full bg-black/10 md:left-1/2">
-            {/* Garis Hijau Aktif yang Digambar Saat Scroll */}
-            <div
-              ref={lineRef}
-              className="absolute inset-0 origin-top rounded-full bg-primary"
-              style={{ transform: 'scaleY(0)' }}
-            />
-            {/* Glow Tracker Dot di ujung garis */}
-            <div
-              ref={trackerRef}
-              className="pointer-events-none absolute left-1/2 top-0 h-4 w-4 -translate-x-1/2 rounded-full bg-primary shadow-[0_0_12px_rgba(0,177,79,1)]"
-            />
+          <div className="absolute left-6 top-0 bottom-0 w-[4px] -translate-x-1/2 rounded-full bg-primary/20 md:left-1/2">
+            <div className="absolute inset-0 rounded-full bg-gradient-to-b from-primary via-emerald-500 to-primary" />
           </div>
 
           {/* TIMELINE ITEMS LIST (ZIGZAG) */}
@@ -240,19 +106,19 @@ export function CenterTimelineSection() {
                 <div
                   key={step.year}
                   className={cn(
-                    'timeline-row-item relative flex flex-col items-start md:flex-row md:items-center',
+                    'relative flex flex-col items-start md:flex-row md:items-center',
                     isEven ? 'md:justify-start' : 'md:justify-end'
                   )}
                 >
                   {/* Center Node / Dot Icon */}
-                  <div className="timeline-center-node absolute left-6 top-6 z-10 flex h-11 w-11 -translate-x-1/2 items-center justify-center rounded-full border-4 border-[#F8FAF9] bg-primary text-white shadow-lg md:left-1/2 md:top-1/2 md:-translate-y-1/2">
+                  <div className="absolute left-6 top-6 z-10 flex h-11 w-11 -translate-x-1/2 items-center justify-center rounded-full border-4 border-[#F8FAF9] bg-primary text-white shadow-lg md:left-1/2 md:top-1/2 md:-translate-y-1/2">
                     <Icon className="h-4 w-4" />
                   </div>
 
                   {/* Card Content (Kiri atau Kanan) */}
                   <div
                     className={cn(
-                      'timeline-card-content w-full pl-14 md:pl-0 md:w-[44%]',
+                      'w-full pl-14 md:pl-0 md:w-[44%]',
                       isEven ? 'md:mr-auto md:text-right' : 'md:ml-auto md:text-left'
                     )}
                   >

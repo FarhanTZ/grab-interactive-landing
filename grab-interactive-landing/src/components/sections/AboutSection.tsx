@@ -21,10 +21,10 @@ export function AboutSection() {
     if (!section) return;
 
     const ctx = gsap.context(() => {
-      // 🚀 Animasi Gerak Ke Atas (Scrub Lift-Up) saat scroll masuk
+      // 🚀 1. Scrub Lift-Up: AboutSection naik terangkat halus dari space putih
       gsap.fromTo(
         section,
-        { y: 120 },
+        { y: 130 },
         {
           y: 0,
           ease: 'none',
@@ -37,18 +37,7 @@ export function AboutSection() {
         }
       );
 
-      // Hero fade lanjutan saat mulai scroll ke About
-      gsap.to('#journey-trigger', {
-        opacity: 0.3,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top 95%',
-          end: 'top 20%',
-          scrub: 1,
-        },
-      });
-
+      // 🌟 2. Animasi Masuk Elemen About Section
       gsap.fromTo(
         '.about-eyebrow',
         { y: 24, autoAlpha: 0 },
@@ -58,52 +47,67 @@ export function AboutSection() {
           duration: 0.6,
           ease: 'power3.out',
           clearProps: 'all',
-          scrollTrigger: { trigger: '.about-header', start: 'top 85%', toggleActions: 'play none none none' },
+          scrollTrigger: { trigger: '.about-header', start: 'top 85%', toggleActions: 'play none none reverse' },
         }
       );
 
       gsap.fromTo(
-        '.about-title .line',
-        { yPercent: 110, autoAlpha: 0 },
+        '.about-title',
+        { y: 35, autoAlpha: 0 },
         {
-          yPercent: 0,
+          y: 0,
           autoAlpha: 1,
-          duration: 0.9,
-          stagger: 0.12,
+          duration: 0.8,
+          delay: 0.1,
           ease: 'power4.out',
           clearProps: 'all',
-          scrollTrigger: { trigger: '.about-header', start: 'top 85%', toggleActions: 'play none none none' },
+          scrollTrigger: { trigger: '.about-header', start: 'top 85%', toggleActions: 'play none none reverse' },
+        }
+      );
+
+      gsap.fromTo(
+        '.about-image',
+        { scale: 0.85, autoAlpha: 0, rotate: -6 },
+        {
+          scale: 1,
+          autoAlpha: 1,
+          rotate: 0,
+          duration: 0.9,
+          ease: 'back.out(1.5)',
+          clearProps: 'all',
+          scrollTrigger: { trigger: '.about-header', start: 'top 85%', toggleActions: 'play none none reverse' },
         }
       );
 
       gsap.fromTo(
         '.about-desc',
-        { y: 20, autoAlpha: 0 },
+        { y: 24, autoAlpha: 0 },
         {
           y: 0,
           autoAlpha: 1,
           duration: 0.7,
-          delay: 0.2,
+          delay: 0.15,
           ease: 'power3.out',
           clearProps: 'all',
-          scrollTrigger: { trigger: '.about-header', start: 'top 78%', toggleActions: 'play none none none' },
+          scrollTrigger: { trigger: '.about-header', start: 'top 80%', toggleActions: 'play none none reverse' },
         }
       );
 
       gsap.fromTo(
         '.stat-card',
-        { y: 40, autoAlpha: 0 },
+        { y: 36, autoAlpha: 0 },
         {
           y: 0,
           autoAlpha: 1,
-          duration: 0.7,
+          duration: 0.65,
           stagger: 0.1,
           ease: 'power3.out',
           clearProps: 'all',
-          scrollTrigger: { trigger: '.stats-grid', start: 'top 85%', toggleActions: 'play none none none' },
+          scrollTrigger: { trigger: '.stats-grid', start: 'top 85%', toggleActions: 'play none none reverse' },
         }
       );
 
+      // Angka statistik menghitung naik (*counter*)
       document.querySelectorAll<HTMLElement>('.stat-number').forEach((el) => {
         const target = parseFloat(el.dataset.target || '0');
         const isFloat = target % 1 !== 0;
@@ -112,17 +116,18 @@ export function AboutSection() {
           val: target,
           duration: 1.4,
           ease: 'power2.out',
-          scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' },
+          scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none reverse' },
           onUpdate: () => {
             el.textContent = isFloat ? obj.val.toFixed(1) : Math.round(obj.val).toString();
           },
         });
       });
 
+      // Continuous smooth marquee animation
       gsap.set('.about-marquee-track', { xPercent: -50 });
       gsap.to('.about-marquee-track', {
         xPercent: 0,
-        duration: 18,
+        duration: 22,
         ease: 'none',
         repeat: -1,
       });
@@ -135,11 +140,10 @@ export function AboutSection() {
     <section
       ref={sectionRef}
       id="about"
-      className="relative z-20 min-h-screen w-full overflow-clip bg-primary text-white flex flex-col justify-center"
-      style={{ willChange: 'transform' }}
+      className="relative z-20 min-h-screen w-full overflow-clip -mt-16 md:-mt-24 rounded-t-[36px] md:rounded-t-[48px] bg-primary text-white flex flex-col justify-center py-20 md:py-28 shadow-[0_-16px_50px_rgba(0,0,0,0.18)]"
     >
-      {/* Marquee text */}
-      <div className="pointer-events-none absolute left-0 top-[1px] w-full select-none overflow-hidden">
+      {/* Marquee text background */}
+      <div className="pointer-events-none absolute left-0 top-[20px] w-full select-none overflow-hidden opacity-30">
         <div className="about-marquee-track flex w-max will-change-transform">
           <p className="shrink-0 whitespace-nowrap px-4 text-[72px] font-extrabold leading-none tracking-tighter text-white md:text-[120px]">
             GRAB • SUPERAPP • EVERYDAY • GRAB • SUPERAPP • EVERYDAY • GRAB • SUPERAPP • EVERYDAY •
@@ -150,21 +154,19 @@ export function AboutSection() {
         </div>
       </div>
 
-      <div className="relative mx-auto w-full max-w-[1280px] px-6 py-20 md:px-10 md:py-24">
+      <div className="relative mx-auto w-full max-w-[1280px] px-6 md:px-10">
         {/* HEADER */}
         <div className="about-header relative">
-          <div className="about-eyebrow inline-flex items-center gap-2 rounded-full border border-white/30 bg-white px-3 py-1.5 text-[11px] font-extrabold tracking-widest text-primary shadow-sm">
+          <div className="about-eyebrow inline-flex items-center gap-2 rounded-full border border-white/30 bg-white px-3.5 py-1.5 text-[11px] font-extrabold tracking-widest text-primary shadow-sm">
             <span className="h-2 w-2 rounded-full bg-primary animate-pulse" /> 02 — TENTANG GRAB
           </div>
 
-          <div className="mt-4 flex flex-col gap-6 md:flex-row md:items-center md:justify-between md:gap-8">
-            <h2 className="about-title max-w-full flex-1 text-[32px] font-extrabold leading-[1.15] tracking-tight text-white md:text-[50px]">
-              <span className="line block overflow-hidden"><span className="block py-1">Satu aplikasi untuk</span></span>
-              <span className="line block overflow-hidden"><span className="block py-1 text-white">semua kebutuhan</span></span>
-              <span className="line block overflow-hidden"><span className="block py-1 text-white/90">sehari-hari.</span></span>
+          <div className="mt-6 flex flex-col gap-6 md:flex-row md:items-center md:justify-between md:gap-12">
+            <h2 className="about-title max-w-2xl flex-1 text-3xl font-extrabold leading-[1.12] tracking-tight text-white md:text-5xl">
+              Satu aplikasi untuk <span className="text-white/90">semua kebutuhan</span> sehari-hari.
             </h2>
             {/* Gambar Grab */}
-            <div className="about-image shrink-0 overflow-hidden rounded-full border-white/90 bg-white shadow-[0_16px_50px_rgba(0,0,0,0.22)] h-[100px] w-[100px] md:h-[360px] md:w-[360px]">
+            <div className="about-image shrink-0 overflow-hidden rounded-full border-4 border-white/90 bg-white shadow-[0_16px_50px_rgba(0,0,0,0.22)] h-[120px] w-[120px] md:h-[260px] md:w-[260px]">
               <img
                 src="/images/grab.png"
                 alt="Grab Superapp"
@@ -174,29 +176,29 @@ export function AboutSection() {
             </div>
           </div>
 
-          <p className="about-desc mt-1 max-w-xl leading-relaxed text-white/85 md:text-base">
+          <p className="about-desc mt-6 max-w-2xl leading-relaxed text-white/85 text-sm md:text-base">
             Lahir sebagai <b className="text-white">MyTeksi</b> pada 2012 oleh Anthony Tan &amp; Tan Hooi Ling, Grab kini adalah superapp
             terbesar di Asia Tenggara — menghubungkan jutaan penumpang, mitra pengemudi &amp; UMKM dalam satu ekosistem.
             Dari antar-jemput hingga finansial, semua ada dalam genggaman.
           </p>
         </div>
 
-        {/* STATS - Card putih kontras di background hijau */}
-        <div className="stats-grid mt-10 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
+        {/* STATS */}
+        <div className="stats-grid mt-12 grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-5">
           {STATS.map((s) => (
             <div
               key={s.label}
-              className="stat-card group relative overflow-hidden rounded-[20px] border border-white/20 bg-white p-5 shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition hover:shadow-[0_16px_40px_rgba(0,0,0,0.16)] md:p-6"
+              className="stat-card group relative overflow-hidden rounded-[24px] border border-white/20 bg-white p-6 shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,0.2)]"
             >
               <div className="pointer-events-none absolute -right-6 -top-6 h-20 w-20 rounded-full bg-primary/10 blur-xl transition group-hover:bg-primary/[0.14]" />
               <div className="flex items-baseline gap-1">
-                <span className="stat-number text-[28px] font-extrabold tracking-tight text-[#0A1A12] md:text-[32px]" data-target={s.value}>
+                <span className="stat-number text-3xl font-extrabold tracking-tight text-[#0A1A12] md:text-4xl" data-target={s.value}>
                   {s.value}
                 </span>
-                <span className="text-[18px] font-extrabold text-primary md:text-xl">{s.suffix}</span>
+                <span className="text-xl font-extrabold text-primary md:text-2xl">{s.suffix}</span>
               </div>
-              <div className="mt-1 text-sm font-bold leading-tight text-[#0A1A12]">{s.label}</div>
-              <div className="text-xs font-medium text-[#5B6B62]">{s.sub}</div>
+              <div className="mt-2 text-sm font-bold leading-tight text-[#0A1A12]">{s.label}</div>
+              <div className="mt-0.5 text-xs font-medium text-[#5B6B62]">{s.sub}</div>
             </div>
           ))}
         </div>

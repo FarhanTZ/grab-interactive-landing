@@ -1,8 +1,5 @@
 'use client';
 
-import { useLayoutEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import {
   Car,
   UtensilsCrossed,
@@ -11,122 +8,26 @@ import {
   Building2,
   ArrowUpRight,
   Sparkles,
-  Navigation,
 } from 'lucide-react';
 
-gsap.registerPlugin(ScrollTrigger);
-
 export function JourneyStorySection() {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useLayoutEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const ctx = gsap.context(() => {
-      // 🚀 Animasi Gerak Ke Atas (Scrub Lift-Up) saat scroll masuk
-      gsap.fromTo(
-        section,
-        { y: 120 },
-        {
-          y: 0,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: section,
-            start: 'top bottom',
-            end: 'top top',
-            scrub: 1.2,
-          },
-        }
-      );
-
-      // 1. Entrance header reveal
-      gsap.fromTo(
-        '.story-header-badge',
-        { y: 24, autoAlpha: 0 },
-        {
-          y: 0,
-          autoAlpha: 1,
-          duration: 0.6,
-          ease: 'power3.out',
-          clearProps: 'all',
-          scrollTrigger: { trigger: section, start: 'top 80%', toggleActions: 'play none none none' },
-        }
-      );
-
-      gsap.fromTo(
-        '.story-header-title',
-        { y: 35, autoAlpha: 0 },
-        {
-          y: 0,
-          autoAlpha: 1,
-          duration: 0.8,
-          delay: 0.1,
-          ease: 'power3.out',
-          clearProps: 'all',
-          scrollTrigger: { trigger: section, start: 'top 80%', toggleActions: 'play none none none' },
-        }
-      );
-
-      // 2. Interactive Route Card & Map
-      gsap.fromTo(
-        '.story-map-card',
-        { scale: 0.94, autoAlpha: 0, y: 40 },
-        {
-          scale: 1,
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.85,
-          ease: 'power3.out',
-          clearProps: 'all',
-          scrollTrigger: { trigger: '.story-content-grid', start: 'top 75%', toggleActions: 'play none none none' },
-        }
-      );
-
-      gsap.fromTo(
-        '.story-service-item',
-        { x: 30, autoAlpha: 0 },
-        {
-          x: 0,
-          autoAlpha: 1,
-          duration: 0.6,
-          stagger: 0.1,
-          ease: 'power3.out',
-          clearProps: 'all',
-          scrollTrigger: { trigger: '.story-content-grid', start: 'top 75%', toggleActions: 'play none none none' },
-        }
-      );
-
-      // 3. Parallax ambient background
-      gsap.to('.story-ambient-glow', {
-        y: -50,
-        ease: 'none',
-        scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: 1 },
-      });
-    }, section);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
     <section
-      ref={sectionRef}
       id="perjalanan-kami"
-      className="relative z-30 min-h-screen w-full overflow-clip bg-gradient-to-b from-[#00A045] to-[#008A3B] text-white flex flex-col justify-center"
-      style={{ willChange: 'transform' }}
+      className="relative z-30 min-h-screen w-full overflow-clip -mt-10 md:-mt-16 rounded-t-[36px] md:rounded-t-[48px] bg-gradient-to-b from-[#00A045] to-[#008A3B] text-white flex flex-col justify-center py-20 md:py-28 shadow-[0_-16px_50px_rgba(0,0,0,0.20)]"
     >
       {/* Decorative Grid & Glow */}
       <div className="pointer-events-none absolute inset-0 opacity-10" style={{ backgroundImage: `linear-gradient(to right, white 1px, transparent 1px), linear-gradient(to bottom, white 1px, transparent 1px)`, backgroundSize: '44px 44px' }} />
-      <div className="story-ambient-glow pointer-events-none absolute -left-32 top-1/4 h-[480px] w-[480px] rounded-full bg-white/15 blur-[90px]" />
-      <div className="story-ambient-glow pointer-events-none absolute -right-32 bottom-10 h-[520px] w-[520px] rounded-full bg-emerald-200/15 blur-[100px]" />
+      <div className="pointer-events-none absolute -left-32 top-1/4 h-[480px] w-[480px] rounded-full bg-white/15 blur-[90px]" />
+      <div className="pointer-events-none absolute -right-32 bottom-10 h-[520px] w-[520px] rounded-full bg-emerald-200/15 blur-[100px]" />
 
-      <div className="relative mx-auto w-full max-w-[1280px] px-6 py-20 md:px-10 md:py-24">
+      <div className="relative mx-auto w-full max-w-[1280px] px-6 md:px-10">
         {/* HEADER SECTION 03 */}
         <div>
-          <div className="story-header-badge inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/20 px-3.5 py-1.5 text-xs font-extrabold tracking-widest text-white backdrop-blur-md shadow-sm">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/20 px-3.5 py-1.5 text-xs font-extrabold tracking-widest text-white backdrop-blur-md shadow-sm">
             <Building2 className="h-4 w-4" /> 03 — PERJALANAN KAMI
           </div>
-          <h2 className="story-header-title mt-4 text-3xl font-extrabold leading-tight tracking-tight text-white md:text-[44px]">
+          <h2 className="mt-4 text-3xl font-extrabold leading-tight tracking-tight text-white md:text-5xl">
             Dari satu kota di Malaysia,<br />
             hingga jutaan perjalanan tiap hari.
           </h2>
@@ -136,9 +37,9 @@ export function JourneyStorySection() {
         </div>
 
         {/* STORY CONTENT GRID */}
-        <div className="story-content-grid mt-12 grid gap-8 md:mt-16 md:grid-cols-[1.1fr_0.9fr] md:items-center md:gap-12">
+        <div className="mt-12 grid gap-8 md:mt-16 md:grid-cols-[1.1fr_0.9fr] md:items-center md:gap-12">
           {/* Interactive Map Visual Card */}
-          <div className="story-map-card relative overflow-hidden rounded-[28px] border border-white/20 bg-white p-2 shadow-[0_24px_60px_rgba(0,0,0,0.25)]">
+          <div className="relative overflow-hidden rounded-[28px] border border-white/20 bg-white p-2 shadow-[0_24px_60px_rgba(0,0,0,0.25)]">
             <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[22px] bg-[#EEF2EF] p-4 md:aspect-[1.2/1]">
               <div className="absolute inset-0 opacity-40" style={{ backgroundImage: `linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px)`, backgroundSize: '32px 32px' }} />
               
@@ -173,7 +74,7 @@ export function JourneyStorySection() {
 
           {/* Service Pillar Highlights */}
           <div className="flex flex-col gap-4">
-            <div className="story-service-item rounded-2xl border border-white/20 bg-white/10 p-5 backdrop-blur-md">
+            <div className="rounded-2xl border border-white/20 bg-white/10 p-5 backdrop-blur-md">
               <div className="flex items-center gap-2 text-xs font-extrabold tracking-wider text-emerald-200">
                 <Sparkles className="h-4 w-4" /> EKOSISTEM DIGITAL LENGKAP
               </div>
@@ -189,7 +90,7 @@ export function JourneyStorySection() {
                 { icon: UtensilsCrossed, label: 'GrabFood & Mart', sub: 'Food • Groceries' },
                 { icon: Wallet2, label: 'GrabPay', sub: 'Wallet • PayLater' },
               ].map((it) => (
-                <div key={it.label} className="story-service-item group rounded-2xl border border-white/20 bg-white p-3.5 text-center text-[#0A1A12] shadow-md transition hover:-translate-y-1 hover:shadow-xl">
+                <div key={it.label} className="group rounded-2xl border border-white/20 bg-white p-3.5 text-center text-[#0A1A12] shadow-md transition hover:-translate-y-1 hover:shadow-xl">
                   <it.icon className="mx-auto h-6 w-6 text-primary transition-transform group-hover:scale-110" />
                   <div className="mt-2 text-xs font-extrabold leading-tight">{it.label}</div>
                   <div className="text-[10px] font-medium text-[#5B6B62] mt-0.5">{it.sub}</div>
@@ -197,7 +98,7 @@ export function JourneyStorySection() {
               ))}
             </div>
 
-            <div className="story-service-item flex flex-wrap gap-2 pt-2">
+            <div className="flex flex-wrap gap-2 pt-2">
               <span className="rounded-full bg-white px-4 py-2 text-xs font-extrabold text-primary shadow-md">8 Negara SEA</span>
               <span className="rounded-full border border-white/30 bg-white/15 px-4 py-2 text-xs font-bold text-white backdrop-blur">Superapp #1 Asia Tenggara</span>
             </div>
