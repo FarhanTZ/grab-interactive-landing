@@ -37,7 +37,7 @@ export function AboutSection() {
         }
       );
 
-      // 🌟 2. Animasi Masuk Elemen About Section
+      // 🌟 2. Animasi Masuk Elemen About Section (Berulang setiap kali discroll bolak-balik)
       gsap.fromTo(
         '.about-eyebrow',
         { y: 24, autoAlpha: 0 },
@@ -46,8 +46,7 @@ export function AboutSection() {
           autoAlpha: 1,
           duration: 0.6,
           ease: 'power3.out',
-          clearProps: 'all',
-          scrollTrigger: { trigger: '.about-header', start: 'top 85%', toggleActions: 'play none none reverse' },
+          scrollTrigger: { trigger: '.about-header', start: 'top 85%', toggleActions: 'restart none none reverse' },
         }
       );
 
@@ -60,8 +59,7 @@ export function AboutSection() {
           duration: 0.8,
           delay: 0.1,
           ease: 'power4.out',
-          clearProps: 'all',
-          scrollTrigger: { trigger: '.about-header', start: 'top 85%', toggleActions: 'play none none reverse' },
+          scrollTrigger: { trigger: '.about-header', start: 'top 85%', toggleActions: 'restart none none reverse' },
         }
       );
 
@@ -74,8 +72,7 @@ export function AboutSection() {
           rotate: 0,
           duration: 0.9,
           ease: 'back.out(1.5)',
-          clearProps: 'all',
-          scrollTrigger: { trigger: '.about-header', start: 'top 85%', toggleActions: 'play none none reverse' },
+          scrollTrigger: { trigger: '.about-header', start: 'top 85%', toggleActions: 'restart none none reverse' },
         }
       );
 
@@ -88,8 +85,7 @@ export function AboutSection() {
           duration: 0.7,
           delay: 0.15,
           ease: 'power3.out',
-          clearProps: 'all',
-          scrollTrigger: { trigger: '.about-header', start: 'top 80%', toggleActions: 'play none none reverse' },
+          scrollTrigger: { trigger: '.about-header', start: 'top 80%', toggleActions: 'restart none none reverse' },
         }
       );
 
@@ -102,8 +98,7 @@ export function AboutSection() {
           duration: 0.65,
           stagger: 0.1,
           ease: 'power3.out',
-          clearProps: 'all',
-          scrollTrigger: { trigger: '.stats-grid', start: 'top 85%', toggleActions: 'play none none reverse' },
+          scrollTrigger: { trigger: '.stats-grid', start: 'top 85%', toggleActions: 'restart none none reverse' },
         }
       );
 
@@ -116,7 +111,7 @@ export function AboutSection() {
           val: target,
           duration: 1.4,
           ease: 'power2.out',
-          scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none reverse' },
+          scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'restart none none reverse' },
           onUpdate: () => {
             el.textContent = isFloat ? obj.val.toFixed(1) : Math.round(obj.val).toString();
           },

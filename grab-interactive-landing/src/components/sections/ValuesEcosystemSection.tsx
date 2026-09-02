@@ -1,5 +1,8 @@
 'use client';
 
+import { useLayoutEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import {
   ShieldCheck,
   Leaf,
@@ -9,6 +12,8 @@ import {
   Lock,
   CheckCircle2,
 } from 'lucide-react';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const VALUES_DATA = [
   {
@@ -56,8 +61,87 @@ const VALUES_DATA = [
 ];
 
 export function ValuesEcosystemSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useLayoutEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const ctx = gsap.context(() => {
+      // 1. Header reveal (aktif berulang setiap kali discroll bolak-balik)
+      gsap.fromTo(
+        '.values-badge',
+        { y: 24, autoAlpha: 0 },
+        {
+          y: 0,
+          autoAlpha: 1,
+          duration: 0.6,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: section, start: 'top 80%', toggleActions: 'restart none none reverse' },
+        }
+      );
+
+      gsap.fromTo(
+        '.values-heading',
+        { y: 35, autoAlpha: 0 },
+        {
+          y: 0,
+          autoAlpha: 1,
+          duration: 0.8,
+          delay: 0.1,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: section, start: 'top 80%', toggleActions: 'restart none none reverse' },
+        }
+      );
+
+      gsap.fromTo(
+        '.values-desc',
+        { y: 24, autoAlpha: 0 },
+        {
+          y: 0,
+          autoAlpha: 1,
+          duration: 0.7,
+          delay: 0.15,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: section, start: 'top 80%', toggleActions: 'restart none none reverse' },
+        }
+      );
+
+      // 2. 3 Value Cards Staggered Reveal
+      gsap.fromTo(
+        '.value-card-box',
+        { y: 50, scale: 0.93, autoAlpha: 0 },
+        {
+          y: 0,
+          scale: 1,
+          autoAlpha: 1,
+          duration: 0.8,
+          stagger: 0.14,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: '.values-card-grid', start: 'top 78%', toggleActions: 'restart none none reverse' },
+        }
+      );
+
+      // 3. Bottom Banner Reveal
+      gsap.fromTo(
+        '.values-bottom-banner',
+        { y: 30, autoAlpha: 0 },
+        {
+          y: 0,
+          autoAlpha: 1,
+          duration: 0.7,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: '.values-bottom-banner', start: 'top 88%', toggleActions: 'restart none none reverse' },
+        }
+      );
+    }, section);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <section
+      ref={sectionRef}
       id="nilai-keamanan"
       className="relative z-40 min-h-screen w-full overflow-clip -mt-10 md:-mt-16 rounded-t-[36px] md:rounded-t-[48px] bg-[#07160D] py-20 text-white flex flex-col justify-center md:py-28 shadow-[0_-16px_50px_rgba(0,0,0,0.30)]"
     >
@@ -69,26 +153,26 @@ export function ValuesEcosystemSection() {
       <div className="relative mx-auto w-full max-w-[1280px] px-6 md:px-10">
         {/* HEADER */}
         <div className="text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-extrabold tracking-widest text-primary backdrop-blur-md">
+          <div className="values-badge inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-extrabold tracking-widest text-primary backdrop-blur-md">
             <Sparkles className="h-4 w-4" /> 04 — PRINSIP & NILAI KAMI
           </div>
-          <h2 className="mt-4 text-3xl font-extrabold leading-tight tracking-tight text-white md:text-5xl">
+          <h2 className="values-heading mt-4 text-3xl font-extrabold leading-tight tracking-tight text-white md:text-5xl">
             Inovasi Berdampak Nyata bagi<br />
             Masyarakat & Masa Depan
           </h2>
-          <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-white/70 md:text-base">
+          <p className="values-desc mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-white/70 md:text-base">
             Tiga pilar fundamental yang menggerakkan setiap baris kode, teknologi AI, dan operasional Grab di seluruh Asia Tenggara.
           </p>
         </div>
 
         {/* 3 HERO VALUE CARDS GRID */}
-        <div className="mt-14 grid gap-6 md:mt-18 md:grid-cols-3 md:gap-7">
+        <div className="values-card-grid mt-14 grid gap-6 md:mt-18 md:grid-cols-3 md:gap-7">
           {VALUES_DATA.map((item) => {
             const Icon = item.icon;
             return (
               <div
                 key={item.id}
-                className="group relative flex flex-col justify-between overflow-hidden rounded-[28px] border border-white/10 bg-[#0E2317]/80 p-7 shadow-[0_16px_40px_rgba(0,0,0,0.3)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-2 hover:border-primary/40 hover:shadow-[0_24px_50px_rgba(0,177,79,0.2)] md:p-8"
+                className="value-card-box group relative flex flex-col justify-between overflow-hidden rounded-[28px] border border-white/10 bg-[#0E2317]/80 p-7 shadow-[0_16px_40px_rgba(0,0,0,0.3)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-2 hover:border-primary/40 hover:shadow-[0_24px_50px_rgba(0,177,79,0.2)] md:p-8"
               >
                 {/* Glow Spot */}
                 <div className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-primary/15 blur-2xl transition-all duration-300 group-hover:bg-primary/25" />
@@ -135,7 +219,7 @@ export function ValuesEcosystemSection() {
         </div>
 
         {/* BOTTOM IMPACT BANNER */}
-        <div className="mt-12 rounded-[24px] border border-white/10 bg-white/5 p-6 md:p-8 backdrop-blur-xl flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="values-bottom-banner mt-12 rounded-[24px] border border-white/10 bg-white/5 p-6 md:p-8 backdrop-blur-xl flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-4">
             <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/20 text-primary border border-primary/30">
               <Lock className="h-6 w-6" />
