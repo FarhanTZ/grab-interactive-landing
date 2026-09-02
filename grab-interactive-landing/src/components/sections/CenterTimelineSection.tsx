@@ -107,6 +107,7 @@ export function CenterTimelineSection() {
         // Setup Timeline PAUSED khusus untuk section tahun ini
         const tl = gsap.timeline({ paused: true });
 
+        // 1. Watermark zoom
         if (watermark) {
           tl.fromTo(
             watermark,
@@ -116,15 +117,17 @@ export function CenterTimelineSection() {
           );
         }
 
+        // 🟢 2. Garis Hijau Mengalir Turun Mulus dari Atas ke Bawah
         if (line) {
           tl.fromTo(
             line,
             { scaleY: 0 },
-            { scaleY: 1, transformOrigin: 'top center', duration: 0.9, ease: 'power2.out' },
-            0.1
+            { scaleY: 1, transformOrigin: 'top center', duration: 1.0, ease: 'power2.inOut' },
+            0
           );
         }
 
+        // 3. Ikon Node Berputar 360° dan Membesar
         if (node) {
           tl.fromTo(
             node,
@@ -134,6 +137,7 @@ export function CenterTimelineSection() {
           );
         }
 
+        // 4. Kartu Tahun Meluncur Masuk dari Kiri / Kanan
         if (card) {
           tl.fromTo(
             card,
@@ -143,6 +147,7 @@ export function CenterTimelineSection() {
           );
         }
 
+        // 5. Poin Pencapaian Masuk Berurutan
         if (achievements.length > 0) {
           tl.fromTo(
             achievements,
@@ -154,7 +159,7 @@ export function CenterTimelineSection() {
 
         timelines.set(sec, tl);
 
-        // 🎯 IntersectionObserver khusus untuk section tahun ini
+        // 🎯 IntersectionObserver: play saat masuk, reverse saat keluar
         const obs = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
@@ -167,7 +172,7 @@ export function CenterTimelineSection() {
               }
             });
           },
-          { threshold: 0.18 }
+          { threshold: 0.15 }
         );
 
         obs.observe(sec);
@@ -195,8 +200,23 @@ export function CenterTimelineSection() {
             className="timeline-fullscreen-step relative min-h-screen w-full overflow-clip -mt-10 md:-mt-16 rounded-t-[36px] md:rounded-t-[48px] bg-[#F8FAF9] py-20 px-6 md:px-10 flex flex-col justify-center items-center shadow-[0_-16px_50px_rgba(0,0,0,0.10)]"
             style={{ zIndex, willChange: 'transform' }}
           >
-            {/* GIANT WATERMARK YEAR */}
-            <div className="timeline-step-watermark pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 select-none text-[150px] sm:text-[230px] md:text-[340px] font-black tracking-tighter text-[#0A1A12] opacity-[0.05] leading-none whitespace-nowrap">
+            {/* 🟢 TRACK & GARIS HIJAU */}
+            <div className="pointer-events-none absolute left-6 md:left-1/2 top-0 bottom-0 w-[5px] -translate-x-1/2 rounded-full bg-black/10 z-10">
+              <div
+                className="timeline-step-line-fill absolute inset-0 origin-top rounded-full bg-gradient-to-b from-[#00B14F] via-emerald-500 to-[#00B14F] shadow-[0_0_12px_rgba(0,177,79,0.7)]"
+                style={{ transform: 'scaleY(0)' }}
+              />
+            </div>
+
+            {/* GIANT WATERMARK YEAR - SELANG SELING KANAN & KIRI */}
+            <div
+              className={cn(
+                'timeline-step-watermark pointer-events-none absolute top-1/2 -translate-y-1/2 select-none text-[140px] sm:text-[220px] md:text-[300px] lg:text-[350px] font-black tracking-tighter text-[#0A1A12] opacity-[0.06] leading-none whitespace-nowrap',
+                isLeft
+                  ? 'left-1/2 -translate-x-1/2 md:left-auto md:right-8 lg:right-16 md:translate-x-0'
+                  : 'left-1/2 -translate-x-1/2 md:left-8 lg:left-16 md:right-auto md:translate-x-0'
+              )}
+            >
               {step.watermark}
             </div>
 
@@ -204,16 +224,7 @@ export function CenterTimelineSection() {
             <div className="pointer-events-none absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `linear-gradient(to right, #000 1px, transparent 1px), linear-gradient(to bottom, #000 1px, transparent 1px)`, backgroundSize: '40px 40px' }} />
             <div className="pointer-events-none absolute left-1/2 top-1/2 h-[650px] w-[650px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/[0.04] blur-[100px]" />
 
-            {/* CONTINUOUS CENTER VERTICAL TIMELINE LINE */}
-            <div className="pointer-events-none absolute left-6 top-0 bottom-0 w-[4px] -translate-x-1/2 rounded-full bg-black/10 md:left-1/2">
-              {/* Active green line filling down */}
-              <div
-                className="timeline-step-line-fill absolute inset-0 origin-top rounded-full bg-gradient-to-b from-primary via-emerald-500 to-primary"
-                style={{ transform: 'scaleY(0)' }}
-              />
-            </div>
-
-            <div className="relative mx-auto w-full max-w-[1240px]">
+            <div className="relative mx-auto w-full max-w-[1240px] z-20">
               {/* STEP CONTAINER */}
               <div
                 className={cn(
@@ -222,7 +233,7 @@ export function CenterTimelineSection() {
                 )}
               >
                 {/* Center Node / Dot Icon */}
-                <div className="timeline-step-node absolute left-6 top-6 z-20 flex h-14 w-14 -translate-x-1/2 items-center justify-center rounded-full border-4 border-[#F8FAF9] bg-primary text-white shadow-xl shadow-primary/25 md:left-1/2 md:top-1/2 md:-translate-y-1/2">
+                <div className="timeline-step-node absolute left-6 top-6 z-30 flex h-14 w-14 -translate-x-1/2 items-center justify-center rounded-full border-4 border-[#F8FAF9] bg-primary text-white shadow-xl shadow-primary/25 md:left-1/2 md:top-1/2 md:-translate-y-1/2">
                   <Icon className="h-6 w-6" />
                 </div>
 
@@ -286,7 +297,7 @@ export function CenterTimelineSection() {
 
             {/* BOTTOM NOTE FOR LAST STEP */}
             {idx === TIMELINE_STEPS.length - 1 && (
-              <div className="mt-12 text-center">
+              <div className="mt-12 text-center z-20">
                 <div className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-5 py-2.5 text-xs font-bold text-[#0A1A12] shadow-sm">
                   <Sparkles className="h-4 w-4 text-primary" /> Perjalanan terus berlanjut untuk jutaan masa depan cerah di Asia Tenggara
                 </div>
