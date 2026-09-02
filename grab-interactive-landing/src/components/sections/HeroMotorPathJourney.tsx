@@ -136,15 +136,10 @@ export function HeroMotorPathJourney() {
       // 5. Card 2 (03 Sampai Tujuan) aktif saat mendekati akhir (p: 0.64)
       tl.to('#hero-step-2', { opacity: 1, duration: 0.1 }, 0.64);
 
-      // 6. Card 2 MENGHILANG saat tiba di titik tujuan akhir (p: 0.86), pop-up muncul, lalu transisi fade out bersih ke background putih
       tl.to('#hero-step-2', { opacity: 0, y: -18, scale: 0.92, duration: 0.14, ease: 'power2.in' }, 0.86);
       tl.to('#arrive-popup', { opacity: 1, scale: 1, yPercent: -50, duration: 0.14, ease: 'back.out(1.5)' }, 0.88);
-      tl.to('#hero-map-layer, #arrive-popup, #hero-gps-header', {
-        opacity: 0,
-        scale: 0.97,
-        duration: 0.08,
-        ease: 'power2.inOut',
-      }, 0.92);
+      // Efek blur halus pada peta saat motor tiba di tujuan akhir
+      tl.to('#hero-map-layer', { filter: 'blur(8px)', duration: 0.12, ease: 'power2.out' }, 0.88);
     }, containerRef);
 
     return () => ctx.revert();

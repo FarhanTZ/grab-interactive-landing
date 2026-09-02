@@ -114,13 +114,13 @@ export function AboutSection() {
       id="about"
       className="relative z-20 min-h-screen w-full overflow-clip -mt-16 md:-mt-24 rounded-t-[36px] md:rounded-t-[48px] bg-primary text-white flex flex-col justify-center py-20 md:py-28 shadow-[0_-16px_50px_rgba(0,0,0,0.18)]"
     >
-      {/* Marquee text background */}
-      <div className="pointer-events-none absolute left-0 top-[20px] w-full select-none overflow-hidden opacity-30">
+      {/* Marquee text background - 100% Putih Solid Murni */}
+      <div className="pointer-events-none absolute left-0 top-[20px] w-full select-none overflow-hidden opacity-100">
         <div className="about-marquee-track flex w-max will-change-transform">
-          <p className="shrink-0 whitespace-nowrap px-4 text-[72px] font-extrabold leading-none tracking-tighter text-white md:text-[120px]">
+          <p className="shrink-0 whitespace-nowrap px-4 text-[72px] font-black leading-none tracking-tighter text-white md:text-[120px]">
             GRAB • SUPERAPP • EVERYDAY • GRAB • SUPERAPP • EVERYDAY • GRAB • SUPERAPP • EVERYDAY •
           </p>
-          <p aria-hidden className="shrink-0 whitespace-nowrap px-4 text-[72px] font-extrabold leading-none tracking-tighter text-white md:text-[120px]">
+          <p aria-hidden className="shrink-0 whitespace-nowrap px-4 text-[72px] font-black leading-none tracking-tighter text-white md:text-[120px]">
             GRAB • SUPERAPP • EVERYDAY • GRAB • SUPERAPP • EVERYDAY • GRAB • SUPERAPP • EVERYDAY •
           </p>
         </div>
