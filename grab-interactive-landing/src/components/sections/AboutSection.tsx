@@ -1,10 +1,7 @@
 'use client';
 
-import { useLayoutEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const STATS = [
   { value: 38, suffix: 'jt+', label: 'Pengguna aktif bulanan', sub: 'di 8 negara SEA' },
@@ -16,109 +13,14 @@ const STATS = [
 export function AboutSection() {
   const sectionRef = useRef<HTMLElement>(null);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
 
+    let tl: gsap.core.Timeline | null = null;
+
     const ctx = gsap.context(() => {
-      // 🚀 1. Scrub Lift-Up: AboutSection naik terangkat halus dari space putih
-      gsap.fromTo(
-        section,
-        { y: 130 },
-        {
-          y: 0,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: section,
-            start: 'top bottom',
-            end: 'top top',
-            scrub: 1.2,
-          },
-        }
-      );
-
-      // 🌟 2. Animasi Masuk Elemen About Section (Berulang setiap kali discroll bolak-balik)
-      gsap.fromTo(
-        '.about-eyebrow',
-        { y: 24, autoAlpha: 0 },
-        {
-          y: 0,
-          autoAlpha: 1,
-          duration: 0.6,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: '.about-header', start: 'top 85%', toggleActions: 'restart none none reverse' },
-        }
-      );
-
-      gsap.fromTo(
-        '.about-title',
-        { y: 35, autoAlpha: 0 },
-        {
-          y: 0,
-          autoAlpha: 1,
-          duration: 0.8,
-          delay: 0.1,
-          ease: 'power4.out',
-          scrollTrigger: { trigger: '.about-header', start: 'top 85%', toggleActions: 'restart none none reverse' },
-        }
-      );
-
-      gsap.fromTo(
-        '.about-image',
-        { scale: 0.85, autoAlpha: 0, rotate: -6 },
-        {
-          scale: 1,
-          autoAlpha: 1,
-          rotate: 0,
-          duration: 0.9,
-          ease: 'back.out(1.5)',
-          scrollTrigger: { trigger: '.about-header', start: 'top 85%', toggleActions: 'restart none none reverse' },
-        }
-      );
-
-      gsap.fromTo(
-        '.about-desc',
-        { y: 24, autoAlpha: 0 },
-        {
-          y: 0,
-          autoAlpha: 1,
-          duration: 0.7,
-          delay: 0.15,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: '.about-header', start: 'top 80%', toggleActions: 'restart none none reverse' },
-        }
-      );
-
-      gsap.fromTo(
-        '.stat-card',
-        { y: 36, autoAlpha: 0 },
-        {
-          y: 0,
-          autoAlpha: 1,
-          duration: 0.65,
-          stagger: 0.1,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: '.stats-grid', start: 'top 85%', toggleActions: 'restart none none reverse' },
-        }
-      );
-
-      // Angka statistik menghitung naik (*counter*)
-      document.querySelectorAll<HTMLElement>('.stat-number').forEach((el) => {
-        const target = parseFloat(el.dataset.target || '0');
-        const isFloat = target % 1 !== 0;
-        const obj = { val: 0 };
-        gsap.to(obj, {
-          val: target,
-          duration: 1.4,
-          ease: 'power2.out',
-          scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'restart none none reverse' },
-          onUpdate: () => {
-            el.textContent = isFloat ? obj.val.toFixed(1) : Math.round(obj.val).toString();
-          },
-        });
-      });
-
-      // Continuous smooth marquee animation
+      // Continuous marquee
       gsap.set('.about-marquee-track', { xPercent: -50 });
       gsap.to('.about-marquee-track', {
         xPercent: 0,
@@ -126,9 +28,84 @@ export function AboutSection() {
         ease: 'none',
         repeat: -1,
       });
+
+      // Siapkan timeline animasi masuk yang PAUSED (hanya jalan saat masuk layar)
+      tl = gsap.timeline({ paused: true });
+
+      tl.fromTo(
+        '.about-eyebrow',
+        { y: 35, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' }
+      )
+        .fromTo(
+          '.about-title',
+          { y: 45, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' },
+          '-=0.4'
+        )
+        .fromTo(
+          '.about-image',
+          { scale: 0.5, opacity: 0, rotate: -15 },
+          { scale: 1, opacity: 1, rotate: 0, duration: 0.85, ease: 'back.out(1.6)' },
+          '-=0.5'
+        )
+        .fromTo(
+          '.about-desc',
+          { y: 30, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' },
+          '-=0.4'
+        )
+        .fromTo(
+          '.stat-card',
+          { y: 60, opacity: 0, scale: 0.88 },
+          {
+            y: 0,
+            opacity: 1,
+            scale: 1,
+            duration: 0.65,
+            stagger: 0.12,
+            ease: 'back.out(1.4)',
+            onStart: () => {
+              // Jalankan counter angka statistik saat kartu mulai muncul
+              document.querySelectorAll<HTMLElement>('.stat-number').forEach((el) => {
+                const target = parseFloat(el.dataset.target || '0');
+                const isFloat = target % 1 !== 0;
+                const obj = { val: 0 };
+                gsap.to(obj, {
+                  val: target,
+                  duration: 1.5,
+                  ease: 'power2.out',
+                  onUpdate: () => {
+                    el.textContent = isFloat ? obj.val.toFixed(1) : Math.round(obj.val).toString();
+                  },
+                });
+              });
+            },
+          },
+          '-=0.3'
+        );
     }, section);
 
-    return () => ctx.revert();
+    // 🎯 IntersectionObserver: HANYA memutar animasi ketika section ini secara fisik masuk ke layar pengguna!
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            tl?.play();
+          } else {
+            tl?.reverse();
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+      ctx.revert();
+    };
   }, []);
 
   return (

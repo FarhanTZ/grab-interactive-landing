@@ -1,8 +1,7 @@
 'use client';
 
-import { useLayoutEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import {
   MapPinned,
   Flag,
@@ -16,8 +15,6 @@ import {
   Award,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const TIMELINE_STEPS = [
   {
@@ -91,9 +88,12 @@ const TIMELINE_STEPS = [
 export function CenterTimelineSection() {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
+
+    const observers: IntersectionObserver[] = [];
+    const timelines: Map<HTMLElement, gsap.core.Timeline> = new Map();
 
     const ctx = gsap.context(() => {
       document.querySelectorAll<HTMLElement>('.timeline-fullscreen-step').forEach((sec, i) => {
@@ -104,97 +104,81 @@ export function CenterTimelineSection() {
         const watermark = sec.querySelector<HTMLElement>('.timeline-step-watermark');
         const achievements = sec.querySelectorAll<HTMLElement>('.timeline-achieve-item');
 
-        // 🌟 1. Giant Watermark Parallax Zoom
+        // Setup Timeline PAUSED khusus untuk section tahun ini
+        const tl = gsap.timeline({ paused: true });
+
         if (watermark) {
-          gsap.fromTo(
+          tl.fromTo(
             watermark,
-            { scale: 0.75, opacity: 0, y: 50 },
-            {
-              scale: 1,
-              opacity: 0.05,
-              y: -40,
-              ease: 'none',
-              scrollTrigger: {
-                trigger: sec,
-                start: 'top bottom',
-                end: 'bottom top',
-                scrub: 1,
-              },
-            }
+            { scale: 0.75, opacity: 0 },
+            { scale: 1, opacity: 0.05, duration: 0.8, ease: 'power3.out' },
+            0
           );
         }
 
-        // 🌟 2. Center continuous green line filling
         if (line) {
-          gsap.fromTo(
+          tl.fromTo(
             line,
             { scaleY: 0 },
-            {
-              scaleY: 1,
-              transformOrigin: 'top center',
-              ease: 'none',
-              scrollTrigger: {
-                trigger: sec,
-                start: 'top 85%',
-                end: 'bottom 45%',
-                scrub: 1.2,
-              },
-            }
+            { scaleY: 1, transformOrigin: 'top center', duration: 0.9, ease: 'power2.out' },
+            0.1
           );
         }
 
-        // 🌟 3. Center Node Icon Spring Pop + Spin (aktif berulang setiap kali discroll bolak-balik)
         if (node) {
-          gsap.fromTo(
+          tl.fromTo(
             node,
-            { scale: 0, rotate: -180, autoAlpha: 0 },
-            {
-              scale: 1,
-              rotate: 0,
-              autoAlpha: 1,
-              duration: 0.75,
-              ease: 'back.out(2)',
-              scrollTrigger: { trigger: sec, start: 'top 75%', toggleActions: 'restart none none reverse' },
-            }
+            { scale: 0, rotate: -180, opacity: 0 },
+            { scale: 1, rotate: 0, opacity: 1, duration: 0.7, ease: 'back.out(2)' },
+            0.15
           );
         }
 
-        // 🌟 4. Milestone Card Dynamic 3D Slide In (aktif berulang setiap kali discroll bolak-balik)
         if (card) {
-          gsap.fromTo(
+          tl.fromTo(
             card,
-            { x: isLeft ? -90 : 90, autoAlpha: 0, scale: 0.9 },
-            {
-              x: 0,
-              autoAlpha: 1,
-              scale: 1,
-              duration: 0.85,
-              ease: 'back.out(1.4)',
-              scrollTrigger: { trigger: sec, start: 'top 75%', toggleActions: 'restart none none reverse' },
-            }
+            { x: isLeft ? -90 : 90, opacity: 0, scale: 0.88 },
+            { x: 0, opacity: 1, scale: 1, duration: 0.75, ease: 'back.out(1.4)' },
+            0.2
           );
         }
 
-        // 🌟 5. Key Achievements Stagger In
         if (achievements.length > 0) {
-          gsap.fromTo(
+          tl.fromTo(
             achievements,
-            { x: 25, autoAlpha: 0 },
-            {
-              x: 0,
-              autoAlpha: 1,
-              duration: 0.5,
-              stagger: 0.1,
-              delay: 0.2,
-              ease: 'power3.out',
-              scrollTrigger: { trigger: sec, start: 'top 75%', toggleActions: 'restart none none reverse' },
-            }
+            { x: 30, opacity: 0 },
+            { x: 0, opacity: 1, duration: 0.5, stagger: 0.1, ease: 'power3.out' },
+            0.35
           );
         }
+
+        timelines.set(sec, tl);
+
+        // 🎯 IntersectionObserver khusus untuk section tahun ini
+        const obs = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              const target = entry.target as HTMLElement;
+              const sectionTl = timelines.get(target);
+              if (entry.isIntersecting) {
+                sectionTl?.play();
+              } else {
+                sectionTl?.reverse();
+              }
+            });
+          },
+          { threshold: 0.18 }
+        );
+
+        obs.observe(sec);
+        observers.push(obs);
       });
     }, container);
 
-    return () => ctx.revert();
+    return () => {
+      observers.forEach((obs) => obs.disconnect());
+      ctx.revert();
+    };
   }, []);
 
   return (

@@ -1,6 +1,6 @@
 'use client';
 
-import { useLayoutEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { MotionPathPlugin } from 'gsap/MotionPathPlugin';
@@ -19,7 +19,7 @@ export function HeroMotorPathJourney() {
   const etaTextRef = useRef<HTMLSpanElement>(null);
   const progressTextRef = useRef<HTMLDivElement>(null);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!activePathRef.current || !vehicleRef.current || !containerRef.current) return;
     const ctx = gsap.context(() => {
       const activePath = activePathRef.current!;

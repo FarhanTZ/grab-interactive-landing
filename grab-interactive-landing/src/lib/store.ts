@@ -34,4 +34,10 @@ export const useStore = create<GlobalStoreState>((set) => ({
     set((state) => ({
       calculator: { ...state.calculator, daysPerWeek: days },
     })),
+  resetAll: () =>
+    set({
+      motorProgress: 0,
+      activeJourneyStep: 0,
+      activeService: 'ride',
+    }),
 }));

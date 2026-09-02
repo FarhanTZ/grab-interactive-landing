@@ -24,4 +24,5 @@ export interface GlobalStoreState {
   setCalculatorVehicle: (vehicle: 'bike' | 'car') => void;
   setCalculatorHours: (hours: number) => void;
   setCalculatorDays: (days: number) => void;
+  resetAll: () => void;
 }

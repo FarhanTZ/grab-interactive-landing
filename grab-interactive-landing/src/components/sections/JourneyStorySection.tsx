@@ -1,8 +1,7 @@
 'use client';
 
-import { useLayoutEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import {
   Car,
   UtensilsCrossed,
@@ -13,98 +12,89 @@ import {
   Sparkles,
 } from 'lucide-react';
 
-gsap.registerPlugin(ScrollTrigger);
-
 export function JourneyStorySection() {
   const sectionRef = useRef<HTMLElement>(null);
   const pathRef = useRef<SVGPathElement>(null);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
 
+    let tl: gsap.core.Timeline | null = null;
+
     const ctx = gsap.context(() => {
-      // 1. Entrance header reveal (aktif berulang setiap kali discroll bolak-balik)
-      gsap.fromTo(
+      // Timeline animasi masuk yang PAUSED (hanya jalan saat masuk layar)
+      tl = gsap.timeline({ paused: true });
+
+      tl.fromTo(
         '.story-header-badge',
-        { y: 24, autoAlpha: 0 },
-        {
-          y: 0,
-          autoAlpha: 1,
-          duration: 0.6,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: section, start: 'top 80%', toggleActions: 'restart none none reverse' },
-        }
-      );
-
-      gsap.fromTo(
-        '.story-header-title',
-        { y: 35, autoAlpha: 0 },
-        {
-          y: 0,
-          autoAlpha: 1,
-          duration: 0.8,
-          delay: 0.1,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: section, start: 'top 80%', toggleActions: 'restart none none reverse' },
-        }
-      );
-
-      gsap.fromTo(
-        '.story-header-desc',
-        { y: 24, autoAlpha: 0 },
-        {
-          y: 0,
-          autoAlpha: 1,
-          duration: 0.7,
-          delay: 0.15,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: section, start: 'top 80%', toggleActions: 'restart none none reverse' },
-        }
-      );
-
-      // 2. Interactive Route Card & Map Reveal
-      gsap.fromTo(
-        '.story-map-card',
-        { scale: 0.92, autoAlpha: 0, y: 40 },
-        {
-          scale: 1,
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.85,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: '.story-content-grid', start: 'top 75%', toggleActions: 'restart none none reverse' },
-        }
-      );
-
-      // 3. Draw route SVG line
-      if (pathRef.current) {
-        const len = pathRef.current.getTotalLength();
-        gsap.set(pathRef.current, { strokeDasharray: len, strokeDashoffset: len });
-        gsap.to(pathRef.current, {
-          strokeDashoffset: 0,
-          duration: 1.4,
-          ease: 'power2.out',
-          scrollTrigger: { trigger: '.story-map-card', start: 'top 75%', toggleActions: 'restart none none reverse' },
-        });
-      }
-
-      // 4. Right side service cards staggered reveal
-      gsap.fromTo(
-        '.story-service-item',
-        { y: 30, autoAlpha: 0 },
-        {
-          y: 0,
-          autoAlpha: 1,
-          duration: 0.65,
-          stagger: 0.12,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: '.story-content-grid', start: 'top 75%', toggleActions: 'restart none none reverse' },
-        }
-      );
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' }
+      )
+        .fromTo(
+          '.story-header-title',
+          { y: 40, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' },
+          '-=0.4'
+        )
+        .fromTo(
+          '.story-header-desc',
+          { y: 30, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' },
+          '-=0.4'
+        )
+        .fromTo(
+          '.story-map-card',
+          { scale: 0.85, opacity: 0, y: 50 },
+          {
+            scale: 1,
+            opacity: 1,
+            y: 0,
+            duration: 0.85,
+            ease: 'back.out(1.4)',
+            onStart: () => {
+              // Gambar garis rute SVG saat peta muncul
+              if (pathRef.current) {
+                const len = pathRef.current.getTotalLength();
+                gsap.set(pathRef.current, { strokeDasharray: len, strokeDashoffset: len });
+                gsap.to(pathRef.current, {
+                  strokeDashoffset: 0,
+                  duration: 1.6,
+                  ease: 'power2.out',
+                });
+              }
+            },
+          },
+          '-=0.3'
+        )
+        .fromTo(
+          '.story-service-item',
+          { y: 50, opacity: 0, scale: 0.9 },
+          { y: 0, opacity: 1, scale: 1, duration: 0.65, stagger: 0.12, ease: 'back.out(1.4)' },
+          '-=0.4'
+        );
     }, section);
 
-    return () => ctx.revert();
+    // 🎯 IntersectionObserver: HANYA memutar animasi saat Section 3 terlihat di layar!
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            tl?.play();
+          } else {
+            tl?.reverse();
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+      ctx.revert();
+    };
   }, []);
 
   return (
@@ -120,7 +110,7 @@ export function JourneyStorySection() {
 
       <div className="relative mx-auto w-full max-w-[1280px] px-6 md:px-10">
         {/* HEADER SECTION 03 */}
-        <div>
+        <div className="story-header-box">
           <div className="story-header-badge inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/20 px-3.5 py-1.5 text-xs font-extrabold tracking-widest text-white backdrop-blur-md shadow-sm">
             <Building2 className="h-4 w-4" /> 03 — PERJALANAN KAMI
           </div>

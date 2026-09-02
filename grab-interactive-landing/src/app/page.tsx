@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useStore } from '@/lib/store';
 import { HeroMotorPathJourney } from '@/components/sections/HeroMotorPathJourney';
 import { AboutSection } from '@/components/sections/AboutSection';
 import { JourneyStorySection } from '@/components/sections/JourneyStorySection';
@@ -17,17 +18,45 @@ export default function HomePage() {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
+    // 🛡️ 1. Reset posisi scroll dan disable automatic scroll restoration setiap reload
     if (typeof window !== 'undefined') {
+      if ('scrollRestoration' in window.history) {
+        window.history.scrollRestoration = 'manual';
+      }
+      ScrollTrigger.clearScrollMemory('manual');
       window.scrollTo(0, 0);
+
+      // Reset store global
+      useStore.getState().resetAll();
+
+      // Reset scroll saat halaman ditutup / direload
+      const handleBeforeUnload = () => {
+        window.scrollTo(0, 0);
+      };
+      window.addEventListener('beforeunload', handleBeforeUnload);
+
+      return () => {
+        window.removeEventListener('beforeunload', handleBeforeUnload);
+      };
     }
   }, []);
 
   const handleLoaded = () => {
     setLoaded(true);
-    // Refresh ScrollTrigger setelah loading screen selesai
-    setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 150);
+
+    // 🛡️ 2. Kembalikan ke paling atas dan refresh seluruh animasi GSAP dari nol
+    requestAnimationFrame(() => {
+      window.scrollTo(0, 0);
+      useStore.getState().resetAll();
+      ScrollTrigger.sort();
+      ScrollTrigger.refresh(true);
+
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        ScrollTrigger.sort();
+        ScrollTrigger.refresh(true);
+      }, 150);
+    });
   };
 
   return (

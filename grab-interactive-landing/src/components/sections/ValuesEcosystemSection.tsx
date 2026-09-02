@@ -1,8 +1,7 @@
 'use client';
 
-import { useLayoutEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import {
   ShieldCheck,
   Leaf,
@@ -12,8 +11,6 @@ import {
   Lock,
   CheckCircle2,
 } from 'lucide-react';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const VALUES_DATA = [
   {
@@ -63,80 +60,67 @@ const VALUES_DATA = [
 export function ValuesEcosystemSection() {
   const sectionRef = useRef<HTMLElement>(null);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
 
+    let tl: gsap.core.Timeline | null = null;
+
     const ctx = gsap.context(() => {
-      // 1. Header reveal (aktif berulang setiap kali discroll bolak-balik)
-      gsap.fromTo(
+      // Timeline animasi masuk yang PAUSED (hanya jalan saat Section 4 masuk layar)
+      tl = gsap.timeline({ paused: true });
+
+      tl.fromTo(
         '.values-badge',
-        { y: 24, autoAlpha: 0 },
-        {
-          y: 0,
-          autoAlpha: 1,
-          duration: 0.6,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: section, start: 'top 80%', toggleActions: 'restart none none reverse' },
-        }
-      );
-
-      gsap.fromTo(
-        '.values-heading',
-        { y: 35, autoAlpha: 0 },
-        {
-          y: 0,
-          autoAlpha: 1,
-          duration: 0.8,
-          delay: 0.1,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: section, start: 'top 80%', toggleActions: 'restart none none reverse' },
-        }
-      );
-
-      gsap.fromTo(
-        '.values-desc',
-        { y: 24, autoAlpha: 0 },
-        {
-          y: 0,
-          autoAlpha: 1,
-          duration: 0.7,
-          delay: 0.15,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: section, start: 'top 80%', toggleActions: 'restart none none reverse' },
-        }
-      );
-
-      // 2. 3 Value Cards Staggered Reveal
-      gsap.fromTo(
-        '.value-card-box',
-        { y: 50, scale: 0.93, autoAlpha: 0 },
-        {
-          y: 0,
-          scale: 1,
-          autoAlpha: 1,
-          duration: 0.8,
-          stagger: 0.14,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: '.values-card-grid', start: 'top 78%', toggleActions: 'restart none none reverse' },
-        }
-      );
-
-      // 3. Bottom Banner Reveal
-      gsap.fromTo(
-        '.values-bottom-banner',
-        { y: 30, autoAlpha: 0 },
-        {
-          y: 0,
-          autoAlpha: 1,
-          duration: 0.7,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: '.values-bottom-banner', start: 'top 88%', toggleActions: 'restart none none reverse' },
-        }
-      );
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' }
+      )
+        .fromTo(
+          '.values-heading',
+          { y: 40, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' },
+          '-=0.4'
+        )
+        .fromTo(
+          '.values-desc',
+          { y: 30, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' },
+          '-=0.4'
+        )
+        .fromTo(
+          '.value-card-box',
+          { y: 60, opacity: 0, scale: 0.88 },
+          { y: 0, opacity: 1, scale: 1, duration: 0.7, stagger: 0.14, ease: 'back.out(1.4)' },
+          '-=0.3'
+        )
+        .fromTo(
+          '.values-bottom-banner',
+          { y: 40, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.65, ease: 'power3.out' },
+          '-=0.2'
+        );
     }, section);
 
-    return () => ctx.revert();
+    // 🎯 IntersectionObserver: HANYA memutar animasi saat Section 4 terlihat di layar!
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            tl?.play();
+          } else {
+            tl?.reverse();
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+      ctx.revert();
+    };
   }, []);
 
   return (
@@ -152,7 +136,7 @@ export function ValuesEcosystemSection() {
 
       <div className="relative mx-auto w-full max-w-[1280px] px-6 md:px-10">
         {/* HEADER */}
-        <div className="text-center">
+        <div className="values-header-box text-center">
           <div className="values-badge inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-extrabold tracking-widest text-primary backdrop-blur-md">
             <Sparkles className="h-4 w-4" /> 04 — PRINSIP & NILAI KAMI
           </div>
