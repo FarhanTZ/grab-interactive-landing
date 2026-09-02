@@ -16,14 +16,13 @@ Sistem landing page ini menggunakan arsitektur modular Next.js App Router yang m
 |                           Core Section Layer                            |
 |  1. HeroMotorPathJourney  --> GSAP ScrollTrigger + MotionPathPlugin     |
 |                               (SVG Track + Motor Auto-Rotation + Scrub) |
-|  2. DynamicServiceHero    --> Framer Motion (layoutId + Ambient Glow)   |
-|  3. BentoGridExplore      --> Framer Motion (3D Tilt + Category FLIP)   |
-|  4. PartnerSplitCard      --> Interactive Slider & Split State Machine  |
-|  5. SafetyEcosystem       --> Micro-Widgets & Interactive Toggles       |
-|  6. GlobalFooterCTA       --> Parallax Reveal & QR Modal                |
+|  2. AboutSection          --> Brand overview, metrics & ecosystem stats|
+|  3. JourneyStorySection   --> Interactive user journey story           |
+|  4. ValuesEcosystemSection--> Core pillars, sustainability, & impact    |
+|  5. CenterTimelineSection --> Evolution & milestone timeline            |
 +-------------------------------------------------------------------------+
 |                             Utility Services                            |
-|   [ GSAP Cleanups ]    [ Sound FX (Optional) ]    [ Earnings Calculator ]|
+|   [ GSAP Cleanups ]    [ Sound FX (Optional) ]    [ State Management ]  |
 +-------------------------------------------------------------------------+
 ```
 
@@ -35,7 +34,7 @@ Sistem landing page ini menggunakan arsitektur modular Next.js App Router yang m
 | **Styling** | Tailwind CSS | Utility styling, design tokens (`#00B14F`), dynamic responsive layouts. |
 | **Virtual Scroll** | Lenis Scroll | Mengatur inersia scroll halus di desktop & mobile, menormalkan wheel event. |
 | **Scroll & Motion Path**| GSAP + ScrollTrigger + MotionPathPlugin | Mengontrol motor melintasi garis lintasan SVG, auto-rotate, path filling, dan pinning step. |
-| **UI Micro-Animations** | Framer Motion | Shared-element transitions (`layoutId`), tabs, modal popup, filter re-layout. |
+| **UI Micro-Animations** | Framer Motion | Shared-element transitions, tabs, cards, dan reveal layout. |
 | **Icons** | Lucide React | Ikon sistem yang bersih, konsisten, dan ringan. |
 
 ## 3. Directory & File Structure
@@ -43,7 +42,7 @@ Sistem landing page ini menggunakan arsitektur modular Next.js App Router yang m
 grab-interactive-landing/
 ├── app/
 │   ├── layout.tsx                     # Global layout, fonts, SEO tags
-│   ├── page.tsx                       # Master composition page (Server Component)
+│   ├── page.tsx                       # Master composition page (Client Component)
 │   └── globals.css                    # Tailwind imports, base styles, CSS variables
 ├── components/
 │   ├── common/
@@ -51,24 +50,29 @@ grab-interactive-landing/
 │   │   ├── Badge.tsx                  # Chip label layanan
 │   │   └── Container.tsx              # Container pembatas lebar layar
 │   ├── layout/
+│   │   ├── LoadingScreen.tsx          # Preloader screen animasi awal
 │   │   ├── Navbar.tsx                 # Floating glassmorphism navigation
-│   │   └── Footer.tsx                 # Sticky reveal footer & app download
+│   │   ├── Footer.tsx                 # Sticky reveal footer & app download
+│   │   └── AccessibilityController.tsx# Kontrol aksesibilitas
 │   ├── providers/
-│   │   └── SmoothScrollProvider.tsx      # Ticker connector antara Lenis & GSAP
+│   │   ├── RootProvider.tsx           # Global app context & theme providers
+│   │   └── SmoothScrollProvider.tsx   # Ticker connector antara Lenis & GSAP
 │   ├── sections/
 │   │   ├── HeroMotorPathJourney.tsx   # [UTAMA] Motor melintasi lintasan SVG via scroll
-│   │   ├── DynamicServiceSwitcher.tsx # Switcher Ride, Food, Mart dengan tab glow
-│   │   ├── BentoGridExplore.tsx       # Grid kuliner & groceries 3D tilt
-│   │   ├── PartnerSplitCard.tsx       # Expanding split card & driver calculator
-│   │   └── SafetyEcosystem.tsx        # Toggle fitur keamanan & asuransi
+│   │   ├── AboutSection.tsx           # Ringkasan profil, misi, dan data Grab
+│   │   ├── JourneyStorySection.tsx    # Alur cerita perjalanan interaktif harian
+│   │   ├── ValuesEcosystemSection.tsx # Pilar nilai, sustainability, & footer CTA
+│   │   └── CenterTimelineSection.tsx  # Timeline pencapaian dan evolusi inovasi
 │   └── svg/
 │       ├── GrabMotorcycle.tsx         # Vektor motor, helm hijau, & driver
-│       └── RoadTracks.tsx             # Vektor lintasan jalan SVG presisi
+│       ├── RoadTracks.tsx             # Vektor lintasan jalan SVG presisi
+│       └── WebGLShaderBackground.tsx  # Shader background visual
 ├── hooks/
-│   ├── useReducedMotion.ts            # Aksesibilitas preferensi motion
-│   └── useEarningsCalculator.ts       # Logika kalkulasi simulasi cuan mitra
+│   ├── useAnimationHooks.ts           # Custom hooks utilitas animasi
+│   └── useReducedMotion.ts            # Aksesibilitas preferensi motion
 ├── lib/
 │   ├── constants.ts                   # Data statis copy text & konfigurasi layanan
+│   ├── store.ts                       # State management Zustand
 │   └── utils.ts                       # Classnames merger helper
 └── types/
     ├── landing.ts                     # Definisi tipe data layanan & step

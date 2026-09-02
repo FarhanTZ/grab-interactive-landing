@@ -49,18 +49,19 @@ Palet didesain dengan kontras tinggi bernuansa *Dark Luxury Tech* yang menonjolk
 | - Kiri: Narasi 3 Langkah (Pesan -> On The Way -> Sampai)               |
 | - Kanan: Lintasan SVG Melengkung + Motor Grab Bergerak + Garis Hijau   |
 +------------------------------------------------------------------------+
-| SECTION 2: DYNAMIC SERVICE SWITCHER (Ride, Food, Mart, Express)        |
-| - Pill tab filter di atas                                              |
-| - Mockup UI HP bertransisi mulus dengan ambient background glow       |
+| SECTION 2: ABOUT SECTION (Everyday Everything App)                    |
+| - Misi inklusi ekonomi & pilar dampak di Asia Tenggara                 |
+| - Key metrics & live performance counter                               |
 +------------------------------------------------------------------------+
-| SECTION 3: BENTO GRID EXPLORE (GrabFood & GrabMart)                    |
-| - Kartu promo interaktif, top resto filter, live delivery badge        |
+| SECTION 3: JOURNEY STORY SECTION (Day-in-the-Life Story)               |
+| - Skenario penggunaan harian (Ride, Food, Mart, Express, Pay)          |
+| - Visual interaktif berbasis alur waktu perjalanan                     |
 +------------------------------------------------------------------------+
-| SECTION 4: PARTNER SPLIT-CARD & DRIVER REVENUE CALCULATOR              |
-| - Split hover (Mitra Pengemudi vs Mitra Merchant)                      |
-| - Slider jam kerja vs estimasi penghasilan                             |
+| SECTION 4: VALUES & ECOSYSTEM SECTION                                  |
+| - Komitmen keselamatan, keberlanjutan hijau (EV), & kesejahteraan mitra|
+| - Integrasi CTA unduh aplikasi & footer ekosistem                      |
 +------------------------------------------------------------------------+
-| SECTION 5: FOOTER & APP DOWNLOAD                                       |
-| - QR Code scan to download + badge App Store & Play Store              |
+| SECTION 5: CENTER TIMELINE SECTION                                     |
+| - Garis waktu inovasi dan pencapaian milestone Grab                    |
 +------------------------------------------------------------------------+
 ```

@@ -25,6 +25,7 @@ export function HeroMotorPathJourney() {
       const vehicle = vehicleRef.current!;
       const len = activePath.getTotalLength();
       gsap.set(activePath, { strokeDasharray: len, strokeDashoffset: len });
+
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
@@ -43,7 +44,9 @@ export function HeroMotorPathJourney() {
           },
         },
       });
+
       tl.to(activePath, { strokeDashoffset: 0, ease: 'none', duration: 1 }, 0);
+
       // vehicle follow path - presisi di lintasan, smoothing ringan
       const xTo = gsap.quickTo(vehicle, 'x', { duration: 0.18, ease: 'power2.out' });
       const yTo = gsap.quickTo(vehicle, 'y', { duration: 0.18, ease: 'power2.out' });
@@ -69,6 +72,7 @@ export function HeroMotorPathJourney() {
       gsap.set(vehicle, { x: 880, y: 120, rotation: 90, transformOrigin: '0px 0px' });
       (tl as unknown as { _targetProgress: number })._targetProgress = 0;
       updateVehicleImmediate(0);
+
       // intro text fades out as scroll starts
       tl.to('#hero-intro', { opacity: 0, y: -24, duration: 0.25, ease: 'power2.in' }, 0.14);
       tl.to('#hero-step-0', { opacity: 0, y: -12, duration: 0.2 }, 0.28);
@@ -78,10 +82,12 @@ export function HeroMotorPathJourney() {
       tl.to('#hero-step-1', { opacity: 0, y: -12, duration: 0.2 }, 0.62);
       tl.to('#hero-step-2', { opacity: 1, y: 0, duration: 0.2 }, 0.66);
       tl.to('#arrive-popup', { opacity: 1, scale: 1, duration: 0.25, ease: 'back.out(1.5)' }, 0.88);
-      // smooth exit ke About: hero mengecil + blur + fade biar About yang hijau slide mulus di atasnya
+
+      // smooth exit ke About: hero mengecil + blur + fade
       tl.to(containerRef.current, { scale: 0.94, filter: 'blur(4px)', opacity: 0.85, duration: 0.12, ease: 'power2.inOut' }, 0.92);
       tl.to('#arrive-popup', { opacity: 0, scale: 0.9, duration: 0.08 }, 0.96);
     }, containerRef);
+
     return () => ctx.revert();
   }, []);
 
@@ -102,7 +108,7 @@ export function HeroMotorPathJourney() {
       className="relative h-[100vh] w-screen overflow-hidden bg-surface"
       style={{ height: '100vh', width: '100vw', willChange: 'transform', backfaceVisibility: 'hidden' }}
     >
-      {/* MAP - FULL LAYAR */}
+      {/* MAP - FULL LAYAR 2D SVG */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-surface">
           <div className="absolute inset-0" style={{ backgroundImage: `linear-gradient(to right, var(--theme-grid) 1px, transparent 1px), linear-gradient(to bottom, var(--theme-grid) 1px, transparent 1px)`, backgroundSize: '56px 56px' }} />
