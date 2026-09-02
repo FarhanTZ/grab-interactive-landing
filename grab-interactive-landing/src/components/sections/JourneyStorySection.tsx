@@ -24,28 +24,18 @@ export function JourneyStorySection() {
     if (!section) return;
 
     const ctx = gsap.context(() => {
-      // 0. Section Transition Animation (Sheet slide-in from About)
+      // 🚀 Animasi Gerak Ke Atas (Scrub Lift-Up) saat scroll masuk
       gsap.fromTo(
         section,
+        { y: 120 },
         {
-          y: '18vh',
-          scale: 0.97,
-          borderTopLeftRadius: 36,
-          borderTopRightRadius: 36,
-          boxShadow: '0 -24px 60px rgba(0,0,0,0.15)',
-        },
-        {
-          y: '0vh',
-          scale: 1,
-          borderTopLeftRadius: 0,
-          borderTopRightRadius: 0,
-          boxShadow: '0 0 0 rgba(0,0,0,0)',
+          y: 0,
           ease: 'none',
           scrollTrigger: {
             trigger: section,
-            start: 'top 100%',
-            end: 'top 20%',
-            scrub: 1.3,
+            start: 'top bottom',
+            end: 'top top',
+            scrub: 1.2,
           },
         }
       );
@@ -122,7 +112,7 @@ export function JourneyStorySection() {
     <section
       ref={sectionRef}
       id="perjalanan-kami"
-      className="relative w-full overflow-clip bg-gradient-to-b from-[#00A045] to-[#008A3B] text-white"
+      className="relative z-30 min-h-screen w-full overflow-clip bg-gradient-to-b from-[#00A045] to-[#008A3B] text-white flex flex-col justify-center"
       style={{ willChange: 'transform' }}
     >
       {/* Decorative Grid & Glow */}
@@ -130,7 +120,7 @@ export function JourneyStorySection() {
       <div className="story-ambient-glow pointer-events-none absolute -left-32 top-1/4 h-[480px] w-[480px] rounded-full bg-white/15 blur-[90px]" />
       <div className="story-ambient-glow pointer-events-none absolute -right-32 bottom-10 h-[520px] w-[520px] rounded-full bg-emerald-200/15 blur-[100px]" />
 
-      <div className="relative mx-auto w-full max-w-[1280px] px-6 py-20 md:px-10 md:py-28">
+      <div className="relative mx-auto w-full max-w-[1280px] px-6 py-20 md:px-10 md:py-24">
         {/* HEADER SECTION 03 */}
         <div>
           <div className="story-header-badge inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/20 px-3.5 py-1.5 text-xs font-extrabold tracking-widest text-white backdrop-blur-md shadow-sm">

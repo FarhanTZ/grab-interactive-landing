@@ -10,6 +10,7 @@ import { ValuesEcosystemSection } from '@/components/sections/ValuesEcosystemSec
 import { CenterTimelineSection } from '@/components/sections/CenterTimelineSection';
 import { LoadingScreen } from '@/components/layout/LoadingScreen';
 import { Navbar } from '@/components/layout/Navbar';
+import { StickySectionFocusNav } from '@/components/layout/StickySectionFocusNav';
 import { useStore } from '@/lib/store';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -40,6 +41,7 @@ export default function HomePage() {
     <>
       {!loaded && <LoadingScreen onDone={handleLoaded} />}
       <Navbar />
+      <StickySectionFocusNav />
       <main className="relative">
         <HeroMotorPathJourney />
         <AboutSection />

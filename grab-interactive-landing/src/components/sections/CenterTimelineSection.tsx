@@ -81,6 +81,22 @@ export function CenterTimelineSection() {
     if (!section || !line) return;
 
     const ctx = gsap.context(() => {
+      // 🚀 Animasi Gerak Ke Atas (Scrub Lift-Up) saat scroll masuk
+      gsap.fromTo(
+        section,
+        { y: 120 },
+        {
+          y: 0,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top bottom',
+            end: 'top top',
+            scrub: 1.2,
+          },
+        }
+      );
+
       // 1. Header Animation
       gsap.fromTo(
         '.timeline-sec-badge',
@@ -175,7 +191,7 @@ export function CenterTimelineSection() {
     <section
       ref={sectionRef}
       id="histori-perjalanan"
-      className="relative w-full overflow-clip bg-[#F8FAF9] py-20 text-[#0A1A12] md:py-28"
+      className="relative z-50 min-h-screen w-full overflow-clip bg-[#F8FAF9] py-20 text-[#0A1A12] flex flex-col justify-center md:py-24"
       style={{ willChange: 'transform' }}
     >
       {/* Background Decorative Patterns */}

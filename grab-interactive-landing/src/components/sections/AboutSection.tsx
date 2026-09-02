@@ -21,38 +21,31 @@ export function AboutSection() {
     if (!section) return;
 
     const ctx = gsap.context(() => {
-      // Transisi mulus: About slide dari bawah menutup Hero
+      // 🚀 Animasi Gerak Ke Atas (Scrub Lift-Up) saat scroll masuk
       gsap.fromTo(
         section,
-        { y: '28vh', opacity: 0, scale: 0.98, borderTopLeftRadius: 32, borderTopRightRadius: 32, boxShadow: '0 -20px 60px rgba(0,0,0,0.15)' },
+        { y: 120 },
         {
-          y: '0vh',
-          opacity: 1,
-          scale: 1,
-          borderTopLeftRadius: 0,
-          borderTopRightRadius: 0,
-          boxShadow: '0 0 0 rgba(0,0,0,0)',
+          y: 0,
           ease: 'none',
           scrollTrigger: {
             trigger: section,
-            start: 'top 100%',
-            end: 'top 22%',
-            scrub: 1.4,
+            start: 'top bottom',
+            end: 'top top',
+            scrub: 1.2,
           },
         }
       );
 
-      // Hero fade lanjutan
+      // Hero fade lanjutan saat mulai scroll ke About
       gsap.to('#journey-trigger', {
-        opacity: 0.6,
-        scale: 0.97,
-        filter: 'blur(2px)',
+        opacity: 0.3,
         ease: 'none',
         scrollTrigger: {
           trigger: section,
-          start: 'top 92%',
-          end: 'top 40%',
-          scrub: 1.2,
+          start: 'top 95%',
+          end: 'top 20%',
+          scrub: 1,
         },
       });
 
@@ -142,27 +135,11 @@ export function AboutSection() {
     <section
       ref={sectionRef}
       id="about"
-      className="relative w-full overflow-clip bg-primary text-white"
+      className="relative z-20 min-h-screen w-full overflow-clip bg-primary text-white flex flex-col justify-center"
       style={{ willChange: 'transform' }}
     >
-      {/* Top progress bar */}
-      <div className="pointer-events-none sticky top-0 z-20 h-[3px] w-full bg-white/20">
-        <div
-          className="about-progress h-full w-full origin-left bg-white"
-          style={{ transform: 'scaleX(0)' }}
-          ref={(el) => {
-            if (!el) return;
-            gsap.to(el, {
-              scaleX: 1,
-              ease: 'none',
-              scrollTrigger: { trigger: sectionRef.current, start: 'top top', end: 'bottom bottom', scrub: 0.5 },
-            });
-          }}
-        />
-      </div>
-
       {/* Marquee text */}
-      <div className="pointer-events-none absolute left-0 top-[72px] w-full select-none overflow-hidden md:top-[30px]">
+      <div className="pointer-events-none absolute left-0 top-[1px] w-full select-none overflow-hidden">
         <div className="about-marquee-track flex w-max will-change-transform">
           <p className="shrink-0 whitespace-nowrap px-4 text-[72px] font-extrabold leading-none tracking-tighter text-white md:text-[120px]">
             GRAB • SUPERAPP • EVERYDAY • GRAB • SUPERAPP • EVERYDAY • GRAB • SUPERAPP • EVERYDAY •
@@ -173,7 +150,7 @@ export function AboutSection() {
         </div>
       </div>
 
-      <div className="relative mx-auto w-full max-w-[1280px] px-6 pb-20 pt-[132px] md:px-10 md:pb-28 md:pt-[176px]">
+      <div className="relative mx-auto w-full max-w-[1280px] px-6 py-20 md:px-10 md:py-24">
         {/* HEADER */}
         <div className="about-header relative">
           <div className="about-eyebrow inline-flex items-center gap-2 rounded-full border border-white/30 bg-white px-3 py-1.5 text-[11px] font-extrabold tracking-widest text-primary shadow-sm">

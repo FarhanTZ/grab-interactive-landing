@@ -70,28 +70,18 @@ export function ValuesEcosystemSection() {
     if (!section) return;
 
     const ctx = gsap.context(() => {
-      // 0. Section Dark Sheet Slide-In Transition
+      // 🚀 Animasi Gerak Ke Atas (Scrub Lift-Up) saat scroll masuk
       gsap.fromTo(
         section,
+        { y: 120 },
         {
-          y: '20vh',
-          scale: 0.96,
-          borderTopLeftRadius: 40,
-          borderTopRightRadius: 40,
-          boxShadow: '0 -30px 80px rgba(0,0,0,0.5)',
-        },
-        {
-          y: '0vh',
-          scale: 1,
-          borderTopLeftRadius: 0,
-          borderTopRightRadius: 0,
-          boxShadow: '0 0 0 rgba(0,0,0,0)',
+          y: 0,
           ease: 'none',
           scrollTrigger: {
             trigger: section,
-            start: 'top 100%',
-            end: 'top 18%',
-            scrub: 1.3,
+            start: 'top bottom',
+            end: 'top top',
+            scrub: 1.2,
           },
         }
       );
@@ -162,7 +152,7 @@ export function ValuesEcosystemSection() {
     <section
       ref={sectionRef}
       id="nilai-keamanan"
-      className="relative w-full overflow-clip bg-[#07160D] py-20 text-white md:py-28"
+      className="relative z-40 min-h-screen w-full overflow-clip bg-[#07160D] py-20 text-white flex flex-col justify-center md:py-24"
       style={{ willChange: 'transform' }}
     >
       {/* Background Decorative Lighting */}

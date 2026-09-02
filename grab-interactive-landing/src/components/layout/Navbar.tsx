@@ -106,7 +106,7 @@ export function Navbar() {
     } else {
       const el = document.querySelector(item.href);
       if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }
   };
