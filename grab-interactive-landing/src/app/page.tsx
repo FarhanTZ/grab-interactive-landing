@@ -7,6 +7,7 @@ import { useStore } from '@/lib/store';
 import { HeroMotorPathJourney } from '@/components/sections/HeroMotorPathJourney';
 import { AboutSection } from '@/components/sections/AboutSection';
 import { JourneyStorySection } from '@/components/sections/JourneyStorySection';
+import { ServicesSphereSection } from '@/components/sections/ServicesSphereSection';
 import { ValuesEcosystemSection } from '@/components/sections/ValuesEcosystemSection';
 import { CenterTimelineSection } from '@/components/sections/CenterTimelineSection';
 import { LoadingScreen } from '@/components/layout/LoadingScreen';
@@ -67,6 +68,7 @@ export default function HomePage() {
         <HeroMotorPathJourney />
         <AboutSection />
         <JourneyStorySection />
+        <ServicesSphereSection />
         <ValuesEcosystemSection />
         <CenterTimelineSection />
       </main>
