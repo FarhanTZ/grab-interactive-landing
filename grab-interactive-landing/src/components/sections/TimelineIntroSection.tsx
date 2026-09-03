@@ -13,44 +13,44 @@ export function TimelineIntroSection() {
     offset: ['start start', 'end end'],
   });
 
-  // 1. Grid Background & Header
-  const gridOpacity = useTransform(scrollYProgress, [0, 0.08], [0, 0.04]);
-  const titleOpacity = useTransform(scrollYProgress, [0, 0.08], [0.5, 1]);
-  const titleScale = useTransform(scrollYProgress, [0, 0.08], [0.96, 1]);
+  // 1. Grid Background & Header (Aktif & Terlihat Penuh dari Awal Sampai Akhir)
+  const gridOpacity = useTransform(scrollYProgress, [0, 0.06, 1.0], [0.01, 0.04, 0.04], { clamp: true });
+  const titleOpacity = useTransform(scrollYProgress, [0, 0.06, 1.0], [0.6, 1, 1], { clamp: true });
+  const titleScale = useTransform(scrollYProgress, [0, 0.06, 1.0], [0.96, 1, 1], { clamp: true });
 
-  // 📸 2. FOTO 1 (Kiri Atas): Masuk pada scroll 0.02 -> 0.18, lalu TETAP MUNCUL 100%
-  const photo1Opacity = useTransform(scrollYProgress, [0.02, 0.18], [0, 1]);
-  const photo1Scale = useTransform(scrollYProgress, [0.02, 0.18], [0.25, 1]);
-  const photo1X = useTransform(scrollYProgress, [0.02, 0.18], [-90, 0]);
-  const photo1Y = useTransform(scrollYProgress, [0.02, 0.18], [-90, 0]);
-  const photo1Rotate = useTransform(scrollYProgress, [0.02, 0.18], [-16, -5]);
+  // 📸 2. FOTO 1 (Kiri Atas): Masuk di 0.02 -> 0.14, lalu DIKUNCI 100% SAMPAI AKHIR SECTION (1.00)
+  const photo1Opacity = useTransform(scrollYProgress, [0, 0.02, 0.14, 1.0], [0, 0, 1, 1], { clamp: true });
+  const photo1Scale = useTransform(scrollYProgress, [0, 0.02, 0.14, 1.0], [0.25, 0.25, 1, 1], { clamp: true });
+  const photo1X = useTransform(scrollYProgress, [0, 0.02, 0.14, 1.0], [-90, -90, 0, 0], { clamp: true });
+  const photo1Y = useTransform(scrollYProgress, [0, 0.02, 0.14, 1.0], [-90, -90, 0, 0], { clamp: true });
+  const photo1Rotate = useTransform(scrollYProgress, [0, 0.02, 0.14, 1.0], [-16, -16, -5, -5], { clamp: true });
 
-  // 📸 3. FOTO 2 (Kanan Atas): Masuk pada scroll 0.20 -> 0.36, lalu TETAP MUNCUL 100%
-  const photo2Opacity = useTransform(scrollYProgress, [0.20, 0.36], [0, 1]);
-  const photo2Scale = useTransform(scrollYProgress, [0.20, 0.36], [0.25, 1]);
-  const photo2X = useTransform(scrollYProgress, [0.20, 0.36], [90, 0]);
-  const photo2Y = useTransform(scrollYProgress, [0.20, 0.36], [-90, 0]);
-  const photo2Rotate = useTransform(scrollYProgress, [0.20, 0.36], [16, 5]);
+  // 📸 3. FOTO 2 (Kanan Atas): Masuk di 0.16 -> 0.28, lalu DIKUNCI 100% SAMPAI AKHIR SECTION (1.00)
+  const photo2Opacity = useTransform(scrollYProgress, [0, 0.16, 0.28, 1.0], [0, 0, 1, 1], { clamp: true });
+  const photo2Scale = useTransform(scrollYProgress, [0, 0.16, 0.28, 1.0], [0.25, 0.25, 1, 1], { clamp: true });
+  const photo2X = useTransform(scrollYProgress, [0, 0.16, 0.28, 1.0], [90, 90, 0, 0], { clamp: true });
+  const photo2Y = useTransform(scrollYProgress, [0, 0.16, 0.28, 1.0], [-90, -90, 0, 0], { clamp: true });
+  const photo2Rotate = useTransform(scrollYProgress, [0, 0.16, 0.28, 1.0], [16, 16, 5, 5], { clamp: true });
 
-  // 📸 4. FOTO 3 (Kiri Bawah): Masuk pada scroll 0.38 -> 0.54, lalu TETAP MUNCUL 100%
-  const photo3Opacity = useTransform(scrollYProgress, [0.38, 0.54], [0, 1]);
-  const photo3Scale = useTransform(scrollYProgress, [0.38, 0.54], [0.25, 1]);
-  const photo3X = useTransform(scrollYProgress, [0.38, 0.54], [-90, 0]);
-  const photo3Y = useTransform(scrollYProgress, [0.38, 0.54], [90, 0]);
-  const photo3Rotate = useTransform(scrollYProgress, [0.38, 0.54], [16, 4]);
+  // 📸 4. FOTO 3 (Kiri Bawah): Masuk di 0.30 -> 0.42, lalu DIKUNCI 100% SAMPAI AKHIR SECTION (1.00)
+  const photo3Opacity = useTransform(scrollYProgress, [0, 0.30, 0.42, 1.0], [0, 0, 1, 1], { clamp: true });
+  const photo3Scale = useTransform(scrollYProgress, [0, 0.30, 0.42, 1.0], [0.25, 0.25, 1, 1], { clamp: true });
+  const photo3X = useTransform(scrollYProgress, [0, 0.30, 0.42, 1.0], [-90, -90, 0, 0], { clamp: true });
+  const photo3Y = useTransform(scrollYProgress, [0, 0.30, 0.42, 1.0], [90, 90, 0, 0], { clamp: true });
+  const photo3Rotate = useTransform(scrollYProgress, [0, 0.30, 0.42, 1.0], [16, 16, 4, 4], { clamp: true });
 
-  // 📸 5. FOTO 4 (Kanan Bawah): Masuk pada scroll 0.56 -> 0.72, lalu TETAP MUNCUL 100%
-  const photo4Opacity = useTransform(scrollYProgress, [0.56, 0.72], [0, 1]);
-  const photo4Scale = useTransform(scrollYProgress, [0.56, 0.72], [0.25, 1]);
-  const photo4X = useTransform(scrollYProgress, [0.56, 0.72], [90, 0]);
-  const photo4Y = useTransform(scrollYProgress, [0.56, 0.72], [90, 0]);
-  const photo4Rotate = useTransform(scrollYProgress, [0.56, 0.72], [-16, -4]);
+  // 📸 5. FOTO 4 (Kanan Bawah): Masuk di 0.44 -> 0.56, lalu DIKUNCI 100% SAMPAI AKHIR SECTION (1.00)
+  const photo4Opacity = useTransform(scrollYProgress, [0, 0.44, 0.56, 1.0], [0, 0, 1, 1], { clamp: true });
+  const photo4Scale = useTransform(scrollYProgress, [0, 0.44, 0.56, 1.0], [0.25, 0.25, 1, 1], { clamp: true });
+  const photo4X = useTransform(scrollYProgress, [0, 0.44, 0.56, 1.0], [90, 90, 0, 0], { clamp: true });
+  const photo4Y = useTransform(scrollYProgress, [0, 0.44, 0.56, 1.0], [90, 90, 0, 0], { clamp: true });
+  const photo4Rotate = useTransform(scrollYProgress, [0, 0.44, 0.56, 1.0], [-16, -16, -4, -4], { clamp: true });
 
   return (
     <div
       ref={containerRef}
       id="intro-timeline"
-      className="relative z-10 w-full h-[320vh]"
+      className="relative z-10 w-full h-[380vh]"
     >
       {/* 🌟 STICKY CANVAS 100VH 1 BIDANG UTUH 🌟 */}
       <section className="sticky top-0 flex h-screen min-h-screen w-full items-center justify-center overflow-hidden bg-[#F8FAF9] dark:bg-[#07130C] py-12 px-6 md:px-12 select-none cursor-default">
