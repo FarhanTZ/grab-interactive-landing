@@ -2,49 +2,65 @@
 
 import { useRef } from 'react';
 import Image from 'next/image';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 
 export function TimelineIntroSection() {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // 🌟 Framer Motion useScroll: Melacak scroll fisik secara presisi persis seperti di D:\portofolio_kerja
+  // 🌟 1. Melacak scroll fisik mentah
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
   });
 
-  // 1. Grid Background & Header (Aktif & Terlihat Penuh dari Awal Sampai Akhir)
-  const gridOpacity = useTransform(scrollYProgress, [0, 0.06, 1.0], [0.01, 0.04, 0.04], { clamp: true });
-  const titleOpacity = useTransform(scrollYProgress, [0, 0.06, 1.0], [0.6, 1, 1], { clamp: true });
-  const titleScale = useTransform(scrollYProgress, [0, 0.06, 1.0], [0.96, 1, 1], { clamp: true });
+  // 🌟 2. useSpring Physics: Menghaluskan putaran roda scroll mouse menjadi aliran 60 FPS yang sangat lembut (Silky Buttery Smooth)
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 80,
+    damping: 25,
+    mass: 0.6,
+    restDelta: 0.0005,
+  });
 
-  // 📸 2. FOTO 1 (Kiri Atas): Masuk di 0.02 -> 0.14, lalu DIKUNCI 100% SAMPAI AKHIR SECTION (1.00)
-  const photo1Opacity = useTransform(scrollYProgress, [0, 0.02, 0.14, 1.0], [0, 0, 1, 1], { clamp: true });
-  const photo1Scale = useTransform(scrollYProgress, [0, 0.02, 0.14, 1.0], [0.25, 0.25, 1, 1], { clamp: true });
-  const photo1X = useTransform(scrollYProgress, [0, 0.02, 0.14, 1.0], [-90, -90, 0, 0], { clamp: true });
-  const photo1Y = useTransform(scrollYProgress, [0, 0.02, 0.14, 1.0], [-90, -90, 0, 0], { clamp: true });
-  const photo1Rotate = useTransform(scrollYProgress, [0, 0.02, 0.14, 1.0], [-16, -16, -5, -5], { clamp: true });
+  // 1. Grid Background & Header (Aktif, lalu Pudar + Blur Lembut di Akhir Scroll 0.90 -> 1.00)
+  const gridOpacity = useTransform(smoothProgress, [0, 0.06, 0.88, 1.0], [0.01, 0.04, 0.04, 0], { clamp: true });
+  const titleOpacity = useTransform(smoothProgress, [0, 0.06, 0.88, 1.0], [0.6, 1, 1, 0], { clamp: true });
+  const titleScale = useTransform(smoothProgress, [0, 0.06, 0.88, 1.0], [0.96, 1, 1, 0.92], { clamp: true });
 
-  // 📸 3. FOTO 2 (Kanan Atas): Masuk di 0.16 -> 0.28, lalu DIKUNCI 100% SAMPAI AKHIR SECTION (1.00)
-  const photo2Opacity = useTransform(scrollYProgress, [0, 0.16, 0.28, 1.0], [0, 0, 1, 1], { clamp: true });
-  const photo2Scale = useTransform(scrollYProgress, [0, 0.16, 0.28, 1.0], [0.25, 0.25, 1, 1], { clamp: true });
-  const photo2X = useTransform(scrollYProgress, [0, 0.16, 0.28, 1.0], [90, 90, 0, 0], { clamp: true });
-  const photo2Y = useTransform(scrollYProgress, [0, 0.16, 0.28, 1.0], [-90, -90, 0, 0], { clamp: true });
-  const photo2Rotate = useTransform(scrollYProgress, [0, 0.16, 0.28, 1.0], [16, 16, 5, 5], { clamp: true });
+  // 🌫️ EFEK BLUR HALUS SAAT AKHIR SCROLL (0.86 -> 1.00)
+  const exitBlur = useTransform(
+    smoothProgress,
+    [0, 0.86, 1.0],
+    ['blur(0px)', 'blur(0px)', 'blur(16px)'],
+    { clamp: true }
+  );
 
-  // 📸 4. FOTO 3 (Kiri Bawah): Masuk di 0.30 -> 0.42, lalu DIKUNCI 100% SAMPAI AKHIR SECTION (1.00)
-  const photo3Opacity = useTransform(scrollYProgress, [0, 0.30, 0.42, 1.0], [0, 0, 1, 1], { clamp: true });
-  const photo3Scale = useTransform(scrollYProgress, [0, 0.30, 0.42, 1.0], [0.25, 0.25, 1, 1], { clamp: true });
-  const photo3X = useTransform(scrollYProgress, [0, 0.30, 0.42, 1.0], [-90, -90, 0, 0], { clamp: true });
-  const photo3Y = useTransform(scrollYProgress, [0, 0.30, 0.42, 1.0], [90, 90, 0, 0], { clamp: true });
-  const photo3Rotate = useTransform(scrollYProgress, [0, 0.30, 0.42, 1.0], [16, 16, 4, 4], { clamp: true });
+  // 📸 2. FOTO 1 (Kiri Atas): Masuk 0.02->0.16, Tampil Utuh 0.16->0.88, lalu PUDAR & BLUR 0.88->1.00
+  const photo1Opacity = useTransform(smoothProgress, [0, 0.02, 0.16, 0.88, 1.0], [0, 0, 1, 1, 0], { clamp: true });
+  const photo1Scale = useTransform(smoothProgress, [0, 0.02, 0.16, 0.88, 1.0], [0.25, 0.25, 1, 1, 0.88], { clamp: true });
+  const photo1X = useTransform(smoothProgress, [0, 0.02, 0.16, 1.0], [-90, -90, 0, 0], { clamp: true });
+  const photo1Y = useTransform(smoothProgress, [0, 0.02, 0.16, 1.0], [-90, -90, 0, 0], { clamp: true });
+  const photo1Rotate = useTransform(smoothProgress, [0, 0.02, 0.16, 1.0], [-16, -16, -5, -5], { clamp: true });
 
-  // 📸 5. FOTO 4 (Kanan Bawah): Masuk di 0.44 -> 0.56, lalu DIKUNCI 100% SAMPAI AKHIR SECTION (1.00)
-  const photo4Opacity = useTransform(scrollYProgress, [0, 0.44, 0.56, 1.0], [0, 0, 1, 1], { clamp: true });
-  const photo4Scale = useTransform(scrollYProgress, [0, 0.44, 0.56, 1.0], [0.25, 0.25, 1, 1], { clamp: true });
-  const photo4X = useTransform(scrollYProgress, [0, 0.44, 0.56, 1.0], [90, 90, 0, 0], { clamp: true });
-  const photo4Y = useTransform(scrollYProgress, [0, 0.44, 0.56, 1.0], [90, 90, 0, 0], { clamp: true });
-  const photo4Rotate = useTransform(scrollYProgress, [0, 0.44, 0.56, 1.0], [-16, -16, -4, -4], { clamp: true });
+  // 📸 3. FOTO 2 (Kanan Atas): Masuk 0.18->0.32, Tampil Utuh 0.32->0.88, lalu PUDAR & BLUR 0.88->1.00
+  const photo2Opacity = useTransform(smoothProgress, [0, 0.18, 0.32, 0.88, 1.0], [0, 0, 1, 1, 0], { clamp: true });
+  const photo2Scale = useTransform(smoothProgress, [0, 0.18, 0.32, 0.88, 1.0], [0.25, 0.25, 1, 1, 0.88], { clamp: true });
+  const photo2X = useTransform(smoothProgress, [0, 0.18, 0.32, 1.0], [90, 90, 0, 0], { clamp: true });
+  const photo2Y = useTransform(smoothProgress, [0, 0.18, 0.32, 1.0], [-90, -90, 0, 0], { clamp: true });
+  const photo2Rotate = useTransform(smoothProgress, [0, 0.18, 0.32, 1.0], [16, 16, 5, 5], { clamp: true });
+
+  // 📸 4. FOTO 3 (Kiri Bawah): Masuk 0.34->0.48, Tampil Utuh 0.48->0.88, lalu PUDAR & BLUR 0.88->1.00
+  const photo3Opacity = useTransform(smoothProgress, [0, 0.34, 0.48, 0.88, 1.0], [0, 0, 1, 1, 0], { clamp: true });
+  const photo3Scale = useTransform(smoothProgress, [0, 0.34, 0.48, 0.88, 1.0], [0.25, 0.25, 1, 1, 0.88], { clamp: true });
+  const photo3X = useTransform(smoothProgress, [0, 0.34, 0.48, 1.0], [-90, -90, 0, 0], { clamp: true });
+  const photo3Y = useTransform(smoothProgress, [0, 0.34, 0.48, 1.0], [90, 90, 0, 0], { clamp: true });
+  const photo3Rotate = useTransform(smoothProgress, [0, 0.34, 0.48, 1.0], [16, 16, 4, 4], { clamp: true });
+
+  // 📸 5. FOTO 4 (Kanan Bawah): Masuk 0.50->0.64, Tampil Utuh 0.64->0.88, lalu PUDAR & BLUR 0.88->1.00
+  const photo4Opacity = useTransform(smoothProgress, [0, 0.50, 0.64, 0.88, 1.0], [0, 0, 1, 1, 0], { clamp: true });
+  const photo4Scale = useTransform(smoothProgress, [0, 0.50, 0.64, 0.88, 1.0], [0.25, 0.25, 1, 1, 0.88], { clamp: true });
+  const photo4X = useTransform(smoothProgress, [0, 0.50, 0.64, 1.0], [90, 90, 0, 0], { clamp: true });
+  const photo4Y = useTransform(smoothProgress, [0, 0.50, 0.64, 1.0], [90, 90, 0, 0], { clamp: true });
+  const photo4Rotate = useTransform(smoothProgress, [0, 0.50, 0.64, 1.0], [-16, -16, -4, -4], { clamp: true });
 
   return (
     <div
@@ -59,7 +75,7 @@ export function TimelineIntroSection() {
 
         {/* BACKGROUND GRID LINES PERSIS CENTER TIMELINE */}
         <motion.div
-          style={{ opacity: gridOpacity }}
+          style={{ opacity: gridOpacity, filter: exitBlur }}
           className="pointer-events-none absolute inset-0"
         >
           <div
@@ -80,6 +96,7 @@ export function TimelineIntroSection() {
             x: photo1X,
             y: photo1Y,
             rotate: photo1Rotate,
+            filter: exitBlur,
           }}
           className="absolute left-[2%] sm:left-[3%] md:left-[5%] top-[8%] sm:top-[10%] md:top-[12%] z-10 will-change-transform group cursor-pointer transition-transform duration-300 hover:scale-110 hover:z-20 hover:rotate-0"
         >
@@ -105,6 +122,7 @@ export function TimelineIntroSection() {
             x: photo2X,
             y: photo2Y,
             rotate: photo2Rotate,
+            filter: exitBlur,
           }}
           className="absolute right-[2%] sm:right-[3%] md:right-[5%] top-[8%] sm:top-[10%] md:top-[12%] z-10 will-change-transform group cursor-pointer transition-transform duration-300 hover:scale-110 hover:z-20 hover:rotate-0"
         >
@@ -130,6 +148,7 @@ export function TimelineIntroSection() {
             x: photo3X,
             y: photo3Y,
             rotate: photo3Rotate,
+            filter: exitBlur,
           }}
           className="absolute left-[2%] sm:left-[3%] md:left-[5%] bottom-[8%] sm:bottom-[10%] md:bottom-[12%] z-10 will-change-transform group cursor-pointer transition-transform duration-300 hover:scale-110 hover:z-20 hover:rotate-0"
         >
@@ -155,6 +174,7 @@ export function TimelineIntroSection() {
             x: photo4X,
             y: photo4Y,
             rotate: photo4Rotate,
+            filter: exitBlur,
           }}
           className="absolute right-[2%] sm:right-[3%] md:right-[5%] bottom-[8%] sm:bottom-[10%] md:bottom-[12%] z-10 will-change-transform group cursor-pointer transition-transform duration-300 hover:scale-110 hover:z-20 hover:rotate-0"
         >
@@ -173,7 +193,7 @@ export function TimelineIntroSection() {
 
         {/* Centered Large Title Container: Timeline [Grab Logo] */}
         <motion.div
-          style={{ opacity: titleOpacity, scale: titleScale }}
+          style={{ opacity: titleOpacity, scale: titleScale, filter: exitBlur }}
           className="relative mx-auto flex w-full max-w-[1400px] flex-wrap items-center justify-center gap-x-5 sm:gap-x-8 md:gap-x-10 gap-y-3 text-center z-10"
         >
           {/* Teks "Timeline" */}
