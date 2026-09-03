@@ -185,7 +185,7 @@ export function JourneyStorySection() {
     <section
       ref={sectionRef}
       id="perjalanan-kami"
-      className="relative z-30 flex h-screen w-full min-h-[650px] items-center justify-center overflow-clip -mt-10 md:-mt-16 rounded-t-[36px] md:rounded-t-[48px] bg-[#00B14F] text-white shadow-[0_-16px_50px_rgba(0,0,0,0.18)] select-none cursor-default"
+      className="relative z-30 flex h-screen min-h-screen w-full items-center justify-center overflow-hidden bg-[#00B14F] text-white select-none cursor-default py-12 px-6"
     >
       {/* Dynamic Background Aura Glow */}
       <div className="journey-logo-glow pointer-events-none absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/20 blur-[120px]" />

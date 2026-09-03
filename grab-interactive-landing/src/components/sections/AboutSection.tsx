@@ -1,7 +1,11 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import Image from 'next/image';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const STATS = [
   { value: 38, suffix: 'jt+', label: 'Pengguna aktif bulanan', sub: 'di 8 negara SEA' },
@@ -29,7 +33,7 @@ export function AboutSection() {
         repeat: -1,
       });
 
-      // Siapkan timeline animasi masuk yang PAUSED (hanya jalan saat masuk layar)
+      // Siapkan timeline animasi masuk yang PAUSED (hanya jalan saat user tiba di section ini)
       tl = gsap.timeline({ paused: true });
 
       tl.fromTo(
@@ -86,7 +90,7 @@ export function AboutSection() {
         );
     }, section);
 
-    // 🎯 IntersectionObserver: HANYA memutar animasi ketika section ini secara fisik masuk ke layar pengguna!
+    // 🎯 IntersectionObserver: HANYA memutar animasi ketika section ini secara fisik masuk ke layar setelah Hero selesai!
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -97,7 +101,7 @@ export function AboutSection() {
           }
         });
       },
-      { threshold: 0.15 }
+      { threshold: 0.2 }
     );
 
     observer.observe(section);
@@ -112,7 +116,7 @@ export function AboutSection() {
     <section
       ref={sectionRef}
       id="about"
-      className="relative z-20 min-h-screen w-full overflow-clip -mt-16 md:-mt-24 rounded-t-[36px] md:rounded-t-[48px] bg-primary text-white flex flex-col justify-center py-20 md:py-28 shadow-[0_-16px_50px_rgba(0,0,0,0.18)]"
+      className="relative z-20 h-screen min-h-screen w-full overflow-hidden bg-primary text-white flex flex-col justify-center py-12 md:py-16 select-none"
     >
       {/* Marquee text background - 100% Putih Solid Murni */}
       <div className="pointer-events-none absolute left-0 top-[20px] w-full select-none overflow-hidden opacity-100">

@@ -354,7 +354,7 @@ export function ServicesSphereSection() {
     let tl: gsap.core.Timeline | null = null;
 
     const ctx = gsap.context(() => {
-      // 1. Entrance timeline saat section masuk layar
+      // Entrance timeline saat section masuk layar
       tl = gsap.timeline({ paused: true });
 
       tl.fromTo(
@@ -400,7 +400,7 @@ export function ServicesSphereSection() {
         });
       },
       {
-        threshold: 0.1,
+        threshold: 0.15,
         rootMargin: '50px 0px 50px 0px',
       }
     );
@@ -445,13 +445,13 @@ export function ServicesSphereSection() {
     <section
       ref={sectionRef}
       id="layanan-ekosistem"
-      className="relative z-30 min-h-screen w-full overflow-hidden -mt-10 md:-mt-16 rounded-t-[36px] md:rounded-t-[48px] bg-[#F8FAF9] dark:bg-[#07130C] py-20 md:py-28 flex flex-col justify-between shadow-[0_-18px_55px_rgba(0,0,0,0.12)] select-none"
+      className="relative z-30 h-screen min-h-screen w-full overflow-hidden bg-[#F8FAF9] dark:bg-[#07130C] py-12 md:py-16 flex flex-col justify-center select-none"
     >
       {/* Ambient Lighting Orbs */}
       <div className="pointer-events-none absolute left-1/2 top-1/2 h-[650px] w-[650px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/10 blur-[140px]" />
       <div className="pointer-events-none absolute inset-0 opacity-[0.035]" style={{ backgroundImage: `linear-gradient(to right, #000 1px, transparent 1px), linear-gradient(to bottom, #000 1px, transparent 1px)`, backgroundSize: '40px 40px' }} />
 
-      <div className="relative mx-auto w-full max-w-[1240px] px-6 md:px-10 z-10 flex flex-col justify-between h-full">
+      <div className="relative mx-auto w-full max-w-[1240px] px-6 md:px-10 z-10 flex flex-col justify-center gap-6">
         {/* HEADER & FILTER BAR */}
         <div className="sphere-section-header flex flex-col md:flex-row md:items-end justify-between pb-4 border-b border-black/8 dark:border-white/10 gap-4">
           <div>

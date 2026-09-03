@@ -67,7 +67,7 @@ export function ValuesEcosystemSection() {
     let tl: gsap.core.Timeline | null = null;
 
     const ctx = gsap.context(() => {
-      // Timeline animasi masuk yang PAUSED (hanya jalan saat Section 4 masuk layar)
+      // Timeline animasi masuk yang PAUSED (hanya jalan saat Section masuk layar)
       tl = gsap.timeline({ paused: true });
 
       tl.fromTo(
@@ -101,7 +101,7 @@ export function ValuesEcosystemSection() {
         );
     }, section);
 
-    // 🎯 IntersectionObserver: HANYA memutar animasi saat Section 4 terlihat di layar!
+    // 🎯 IntersectionObserver: HANYA memutar animasi saat Section terlihat di layar!
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -127,7 +127,7 @@ export function ValuesEcosystemSection() {
     <section
       ref={sectionRef}
       id="nilai-keamanan"
-      className="relative z-40 min-h-screen w-full overflow-clip -mt-10 md:-mt-16 rounded-t-[36px] md:rounded-t-[48px] bg-[#07160D] py-20 text-white flex flex-col justify-center md:py-28 shadow-[0_-16px_50px_rgba(0,0,0,0.30)]"
+      className="relative z-40 h-screen min-h-screen w-full overflow-hidden bg-[#07160D] py-14 text-white flex flex-col justify-center select-none"
     >
       {/* Background Decorative Lighting */}
       <div className="pointer-events-none absolute inset-0 opacity-15" style={{ backgroundImage: `linear-gradient(to right, #00B14F 1px, transparent 1px), linear-gradient(to bottom, #00B14F 1px, transparent 1px)`, backgroundSize: '60px 60px' }} />

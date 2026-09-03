@@ -197,7 +197,7 @@ export function CenterTimelineSection() {
           <section
             key={step.year}
             id={`histori-${step.year.toLowerCase()}`}
-            className="timeline-fullscreen-step relative min-h-screen w-full overflow-clip -mt-10 md:-mt-16 rounded-t-[36px] md:rounded-t-[48px] bg-[#F8FAF9] py-20 px-6 md:px-10 flex flex-col justify-center items-center shadow-[0_-16px_50px_rgba(0,0,0,0.10)]"
+            className="timeline-fullscreen-step relative h-screen min-h-screen w-full overflow-hidden bg-[#F8FAF9] py-12 px-6 md:px-10 flex flex-col justify-center items-center select-none"
             style={{ zIndex, willChange: 'transform' }}
           >
             {/* 🟢 TRACK & GARIS HIJAU */}
