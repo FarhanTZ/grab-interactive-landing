@@ -31,32 +31,24 @@ export function JourneyStorySection() {
     if (!section) return;
 
     let isReadyForHover = false;
+    let tl: gsap.core.Timeline | null = null;
 
     const ctx = gsap.context(() => {
-      // 🌟 Timeline Scroll Scrubbing (Sistem Animasi Scroll Per-Frame)
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: section,
-          start: 'top top',
-          end: '+=130%',
-          pin: true,
-          scrub: 1,
-          anticipatePin: 1,
-          onUpdate: (self) => {
-            if (self.progress > 0.5) {
-              isReadyForHover = true;
-            }
-          },
+      // 🌟 Timeline Masuk di 1 Bidang Layer 1 (Menggunakan IntersectionObserver yang Mengalir Natural)
+      tl = gsap.timeline({
+        paused: true,
+        onComplete: () => {
+          isReadyForHover = true;
         },
       });
 
-      // 1. Logo Grab Putih Reveal (Per-frame Scroll In)
+      // 1. Logo Grab Putih Reveal
       tl.fromTo(
         logoRef.current,
         {
           scale: 0.5,
           opacity: 0,
-          y: -80,
+          y: -60,
           filter: 'blur(16px) drop-shadow(0 0 0px rgba(255,255,255,0))',
         },
         {
@@ -64,16 +56,16 @@ export function JourneyStorySection() {
           opacity: 1,
           y: 0,
           filter: 'blur(0px) drop-shadow(0 10px 30px rgba(255,255,255,0.45))',
-          duration: 0.5,
-          ease: 'power2.out',
+          duration: 0.7,
+          ease: 'back.out(1.8)',
         }
       );
 
-      // 2. Animasi Kata-Kata Jatuh & Muncul 1 per 1 Seiring Scroll
+      // 2. Animasi Kata-Kata Jatuh & Muncul 1 per 1 Berurutan
       tl.fromTo(
         '.falling-word',
         {
-          y: -120,
+          y: -60,
           opacity: 0,
           scale: 1.15,
           rotate: (i: number) => (i % 2 === 0 ? -10 : 10),
@@ -84,20 +76,36 @@ export function JourneyStorySection() {
           scale: 1,
           rotate: 0,
           stagger: 0.04,
-          duration: 0.6,
-          ease: 'power2.out',
+          duration: 0.55,
+          ease: 'back.out(1.5)',
         },
-        '-=0.25'
+        '-=0.3'
       );
 
       // 3. Ambient Glow Aura Expansion
       tl.fromTo(
         '.journey-logo-glow',
         { scale: 0.4, opacity: 0 },
-        { scale: 1.4, opacity: 0.45, duration: 0.6, ease: 'sine.out' },
+        { scale: 1.4, opacity: 0.45, duration: 0.8, ease: 'sine.out' },
         0
       );
     }, section);
+
+    // 🎯 IntersectionObserver: Menjalankan animasi secara natural begitu tiba di layar
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            tl?.play();
+          } else {
+            tl?.reverse();
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    observer.observe(section);
 
     // 🌟 Efek Interaktif Kursor Proximity (Dissolve & Scatter saat Didekati)
     const handleMouseMove = (e: MouseEvent) => {
@@ -185,7 +193,7 @@ export function JourneyStorySection() {
     <section
       ref={sectionRef}
       id="perjalanan-kami"
-      className="relative z-30 flex h-screen min-h-screen w-full items-center justify-center overflow-hidden bg-[#00B14F] text-white select-none cursor-default py-12 px-6"
+      className="relative z-10 flex h-screen min-h-screen w-full items-center justify-center overflow-hidden bg-[#00B14F] text-white select-none cursor-default py-12 px-6"
     >
       {/* Dynamic Background Aura Glow */}
       <div className="journey-logo-glow pointer-events-none absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/20 blur-[120px]" />

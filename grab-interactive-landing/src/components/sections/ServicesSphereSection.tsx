@@ -445,7 +445,7 @@ export function ServicesSphereSection() {
     <section
       ref={sectionRef}
       id="layanan-ekosistem"
-      className="relative z-30 h-screen min-h-screen w-full overflow-hidden bg-[#F8FAF9] dark:bg-[#07130C] py-12 md:py-16 flex flex-col justify-center select-none"
+      className="relative z-10 h-screen min-h-screen w-full overflow-hidden bg-[#F8FAF9] dark:bg-[#07130C] py-12 md:py-16 flex flex-col justify-center select-none"
     >
       {/* Ambient Lighting Orbs */}
       <div className="pointer-events-none absolute left-1/2 top-1/2 h-[650px] w-[650px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/10 blur-[140px]" />

@@ -127,7 +127,7 @@ export function ValuesEcosystemSection() {
     <section
       ref={sectionRef}
       id="nilai-keamanan"
-      className="relative z-40 h-screen min-h-screen w-full overflow-hidden bg-[#07160D] py-14 text-white flex flex-col justify-center select-none"
+      className="relative z-10 h-screen min-h-screen w-full overflow-hidden bg-[#07160D] py-14 text-white flex flex-col justify-center select-none"
     >
       {/* Background Decorative Lighting */}
       <div className="pointer-events-none absolute inset-0 opacity-15" style={{ backgroundImage: `linear-gradient(to right, #00B14F 1px, transparent 1px), linear-gradient(to bottom, #00B14F 1px, transparent 1px)`, backgroundSize: '60px 60px' }} />

@@ -116,7 +116,7 @@ export function AboutSection() {
     <section
       ref={sectionRef}
       id="about"
-      className="relative z-20 h-screen min-h-screen w-full overflow-hidden bg-primary text-white flex flex-col justify-center py-12 md:py-16 select-none"
+      className="relative z-10 h-screen min-h-screen w-full overflow-hidden bg-primary text-white flex flex-col justify-center py-12 md:py-16 select-none"
     >
       {/* Marquee text background - 100% Putih Solid Murni */}
       <div className="pointer-events-none absolute left-0 top-[20px] w-full select-none overflow-hidden opacity-100">

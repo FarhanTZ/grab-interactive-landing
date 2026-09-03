@@ -191,14 +191,11 @@ export function CenterTimelineSection() {
       {TIMELINE_STEPS.map((step, idx) => {
         const isLeft = idx % 2 === 0;
         const Icon = step.icon;
-        const zIndex = 50 + idx;
-
         return (
           <section
             key={step.year}
             id={`histori-${step.year.toLowerCase()}`}
-            className="timeline-fullscreen-step relative h-screen min-h-screen w-full overflow-hidden bg-[#F8FAF9] py-12 px-6 md:px-10 flex flex-col justify-center items-center select-none"
-            style={{ zIndex, willChange: 'transform' }}
+            className="timeline-fullscreen-step relative z-10 h-screen min-h-screen w-full overflow-hidden bg-[#F8FAF9] py-12 px-6 md:px-10 flex flex-col justify-center items-center select-none"
           >
             {/* 🟢 TRACK & GARIS HIJAU */}
             <div className="pointer-events-none absolute left-6 md:left-1/2 top-0 bottom-0 w-[5px] -translate-x-1/2 rounded-full bg-black/10 z-10">

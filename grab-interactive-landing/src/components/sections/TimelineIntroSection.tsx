@@ -48,7 +48,7 @@ export function TimelineIntroSection() {
     let floatTween: gsap.core.Tween | null = null;
 
     const ctx = gsap.context(() => {
-      // 🌟 Timeline Entrance: Muncul 1 per 1 secara berurutan tepat saat masuk layar
+      // 🌟 Timeline Entrance: Muncul 1 per 1 secara berurutan tepat saat masuk ke 1 bidang yang sama
       tl = gsap.timeline({ paused: true });
 
       // 1. Grid Background & Teks Timeline + Logo Grab Muncul
@@ -106,12 +106,12 @@ export function TimelineIntroSection() {
             duration: 0.75,
             ease: 'back.out(1.8)',
           },
-          0.45 + idx * 0.22 // Muncul satu per satu dengan jeda jelas
+          0.45 + idx * 0.22
         );
       });
     }, section);
 
-    // 🎯 IntersectionObserver: HANYA memutar animasi saat user tiba di section ini
+    // 🎯 IntersectionObserver: Memicu animasi begitu section tiba di viewport
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -159,7 +159,7 @@ export function TimelineIntroSection() {
     <section
       ref={sectionRef}
       id="intro-timeline"
-      className="relative z-20 flex h-screen min-h-screen w-full items-center justify-center overflow-hidden bg-[#F8FAF9] dark:bg-[#07130C] py-12 px-6 md:px-12 select-none cursor-default"
+      className="relative z-10 flex h-screen min-h-screen w-full items-center justify-center overflow-hidden bg-[#F8FAF9] dark:bg-[#07130C] py-12 px-6 md:px-12 select-none cursor-default"
     >
       {/* Dynamic Ambient Background Glow */}
       <div className="pointer-events-none absolute left-1/2 top-1/2 h-[550px] w-[550px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/10 blur-[140px]" />
@@ -179,7 +179,7 @@ export function TimelineIntroSection() {
           key={item.id}
           id={item.id}
           style={{ opacity: 0, transform: 'scale(0.2)' }}
-          className={`absolute ${item.pos} z-20 will-change-transform group cursor-pointer transition-transform duration-300 hover:scale-110 hover:z-30 hover:rotate-0`}
+          className={`absolute ${item.pos} z-10 will-change-transform group cursor-pointer transition-transform duration-300 hover:scale-110 hover:z-20 hover:rotate-0`}
         >
           {/* Murni Gambar HD dengan Rounded & Shadow Halus */}
           <div className="relative h-24 w-36 sm:h-32 sm:w-48 md:h-44 md:w-68 lg:h-56 lg:w-84 xl:h-64 xl:w-[360px] 2xl:h-68 2xl:w-[400px] overflow-hidden rounded-2xl md:rounded-3xl shadow-[0_18px_45px_rgba(0,0,0,0.18)] transition-all duration-300 group-hover:shadow-[0_24px_55px_rgba(0,177,79,0.3)]">
