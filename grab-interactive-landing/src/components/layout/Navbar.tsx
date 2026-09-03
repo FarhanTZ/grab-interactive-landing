@@ -18,10 +18,10 @@ gsap.registerPlugin(ScrollTrigger);
 const NAV_SECTIONS = [
   { id: 'journey-trigger', label: 'Perjalanan Live', icon: MapPin, href: '#journey-trigger' },
   { id: 'about', label: 'Tentang Grab', icon: Building2, href: '#about' },
+  { id: 'intro-timeline', label: 'Histori Perjalanan', icon: Calendar, href: '#intro-timeline' },
   { id: 'perjalanan-kami', label: 'Perjalanan Kami', icon: Layers, href: '#perjalanan-kami' },
   { id: 'layanan-ekosistem', label: 'Layanan & Fitur', icon: Sparkles, href: '#layanan-ekosistem' },
   { id: 'nilai-keamanan', label: 'Nilai & Keamanan', icon: ShieldCheck, href: '#nilai-keamanan' },
-  { id: 'histori-perjalanan', label: 'Histori Perjalanan', icon: Calendar, href: '#histori-perjalanan' },
 ];
 
 export function Navbar() {

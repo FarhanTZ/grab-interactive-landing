@@ -6,10 +6,11 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useStore } from '@/lib/store';
 import { HeroMotorPathJourney } from '@/components/sections/HeroMotorPathJourney';
 import { AboutSection } from '@/components/sections/AboutSection';
+import { TimelineIntroSection } from '@/components/sections/TimelineIntroSection';
+import { CenterTimelineSection } from '@/components/sections/CenterTimelineSection';
 import { JourneyStorySection } from '@/components/sections/JourneyStorySection';
 import { ServicesSphereSection } from '@/components/sections/ServicesSphereSection';
 import { ValuesEcosystemSection } from '@/components/sections/ValuesEcosystemSection';
-import { CenterTimelineSection } from '@/components/sections/CenterTimelineSection';
 import { LoadingScreen } from '@/components/layout/LoadingScreen';
 import { Navbar } from '@/components/layout/Navbar';
 
@@ -67,10 +68,11 @@ export default function HomePage() {
       <main className="relative">
         <HeroMotorPathJourney />
         <AboutSection />
+        <TimelineIntroSection />
+        <CenterTimelineSection />
         <JourneyStorySection />
         <ServicesSphereSection />
         <ValuesEcosystemSection />
-        <CenterTimelineSection />
       </main>
     </>
   );

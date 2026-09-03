@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import Image from 'next/image';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -21,65 +22,84 @@ const WORDS = [
 
 export function JourneyStorySection() {
   const sectionRef = useRef<HTMLElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const wordsRef = useRef<(HTMLSpanElement | null)[]>([]);
+  const logoRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
 
-    let tl: gsap.core.Timeline | null = null;
     let isReadyForHover = false;
 
     const ctx = gsap.context(() => {
-      // Timeline animasi kata jatuh 1 per 1 tepat saat masuk ke dalam section
-      tl = gsap.timeline({
-        paused: true,
-        onComplete: () => {
-          isReadyForHover = true;
+      // 🌟 Timeline Scroll Scrubbing (Sistem Animasi Scroll Per-Frame)
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: '+=130%',
+          pin: true,
+          scrub: 1,
+          anticipatePin: 1,
+          onUpdate: (self) => {
+            if (self.progress > 0.5) {
+              isReadyForHover = true;
+            }
+          },
         },
       });
 
+      // 1. Logo Grab Putih Reveal (Per-frame Scroll In)
+      tl.fromTo(
+        logoRef.current,
+        {
+          scale: 0.5,
+          opacity: 0,
+          y: -80,
+          filter: 'blur(16px) drop-shadow(0 0 0px rgba(255,255,255,0))',
+        },
+        {
+          scale: 1,
+          opacity: 1,
+          y: 0,
+          filter: 'blur(0px) drop-shadow(0 10px 30px rgba(255,255,255,0.45))',
+          duration: 0.5,
+          ease: 'power2.out',
+        }
+      );
+
+      // 2. Animasi Kata-Kata Jatuh & Muncul 1 per 1 Seiring Scroll
       tl.fromTo(
         '.falling-word',
         {
-          y: -140,
+          y: -120,
           opacity: 0,
-          scale: 1.18,
-          rotate: (i: number) => (i % 2 === 0 ? -8 : 8),
+          scale: 1.15,
+          rotate: (i: number) => (i % 2 === 0 ? -10 : 10),
         },
         {
           y: 0,
           opacity: 1,
           scale: 1,
           rotate: 0,
-          duration: 0.8,
-          stagger: 0.09,
-          ease: 'back.out(2)',
-        }
+          stagger: 0.04,
+          duration: 0.6,
+          ease: 'power2.out',
+        },
+        '-=0.25'
+      );
+
+      // 3. Ambient Glow Aura Expansion
+      tl.fromTo(
+        '.journey-logo-glow',
+        { scale: 0.4, opacity: 0 },
+        { scale: 1.4, opacity: 0.45, duration: 0.6, ease: 'sine.out' },
+        0
       );
     }, section);
 
-    // 🎯 IntersectionObserver dengan rootMargin lebar agar langsung aktif begitu mendekati section
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            tl?.play();
-          } else {
-            isReadyForHover = false;
-            tl?.reverse();
-          }
-        });
-      },
-      {
-        threshold: 0.1,
-        rootMargin: '50px 0px 50px 0px',
-      }
-    );
-
-    observer.observe(section);
-
-    // 🌟 Efek Interaktif Kursor: Ketika didekati, teks menghilang / memudar / melayang (Dissolve & Scatter)
+    // 🌟 Efek Interaktif Kursor Proximity (Dissolve & Scatter saat Didekati)
     const handleMouseMove = (e: MouseEvent) => {
       if (!isReadyForHover) return;
 
@@ -96,29 +116,27 @@ export function JourneyStorySection() {
         const distY = e.clientY - wordCenterY;
         const distance = Math.sqrt(distX * distX + distY * distY);
 
-        const radius = 150; // Radius kedekatan kursor
+        const radius = 140; // Radius kedekatan kursor
 
         if (distance < radius) {
-          // Makin dekat kursor, makin hilang / blur / mengambang menjauh
-          const force = (1 - distance / radius); // 0 (jauh) s/d 1 (sangat dekat)
+          const force = 1 - distance / radius;
           const angle = Math.atan2(distY, distX);
           const pushX = -Math.cos(angle) * force * 40;
-          const pushY = -Math.sin(angle) * force * 50;
-          const rot = (idx % 2 === 0 ? -1 : 1) * force * 20;
+          const pushY = -Math.sin(angle) * force * 45;
+          const rot = (idx % 2 === 0 ? -1 : 1) * force * 18;
 
           gsap.to(wordEl, {
             x: pushX,
             y: pushY,
-            scale: 1 + force * 0.35,
-            opacity: Math.max(0.08, 1 - force * 0.92), // Menghilang hampir transparan
-            filter: `blur(${force * 10}px)`, // Efek blur pudar
+            scale: 1 + force * 0.3,
+            opacity: Math.max(0.1, 1 - force * 0.9),
+            filter: `blur(${force * 8}px)`,
             rotation: rot,
             duration: 0.25,
             ease: 'power2.out',
             overwrite: 'auto',
           });
         } else {
-          // Ketika kursor menjauh, kembalikan ke posisi semula secara membal
           gsap.to(wordEl, {
             x: 0,
             y: 0,
@@ -157,7 +175,6 @@ export function JourneyStorySection() {
     section.addEventListener('mouseleave', handleMouseLeave);
 
     return () => {
-      observer.disconnect();
       window.removeEventListener('mousemove', handleMouseMove);
       section.removeEventListener('mouseleave', handleMouseLeave);
       ctx.revert();
@@ -168,11 +185,33 @@ export function JourneyStorySection() {
     <section
       ref={sectionRef}
       id="perjalanan-kami"
-      className="relative z-30 flex h-screen w-full min-h-[600px] items-center justify-center overflow-clip -mt-10 md:-mt-16 rounded-t-[36px] md:rounded-t-[48px] bg-primary text-white shadow-[0_-16px_50px_rgba(0,0,0,0.18)] select-none cursor-default"
+      className="relative z-30 flex h-screen w-full min-h-[650px] items-center justify-center overflow-clip -mt-10 md:-mt-16 rounded-t-[36px] md:rounded-t-[48px] bg-[#00B14F] text-white shadow-[0_-16px_50px_rgba(0,0,0,0.18)] select-none cursor-default"
     >
-      {/* Main Content Container - Centered */}
-      <div className="relative mx-auto flex w-full max-w-[1600px] flex-col items-center justify-center px-6 md:px-12 text-center">
-        <h2 className="story-main-title max-w-7xl text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[100px] 2xl:text-[124px] font-black leading-[1.06] tracking-tighter text-white text-balance flex flex-wrap justify-center gap-x-[0.26em] gap-y-[0.04em]">
+      {/* Dynamic Background Aura Glow */}
+      <div className="journey-logo-glow pointer-events-none absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/20 blur-[120px]" />
+
+      {/* Main Content Container */}
+      <div
+        ref={containerRef}
+        className="relative mx-auto flex w-full max-w-[1500px] flex-col items-center justify-center px-6 md:px-12 text-center"
+      >
+        {/* 🌟 LOGO GRAB PUTIH (REVEAL SEIRING SCROLL) 🌟 */}
+        <div
+          ref={logoRef}
+          className="relative mb-6 sm:mb-8 md:mb-10 flex items-center justify-center will-change-transform"
+        >
+          <Image
+            src="/images/assets_grab/grab_logo_putih.png"
+            alt="Grab Logo Putih"
+            width={220}
+            height={85}
+            priority
+            className="h-14 sm:h-18 md:h-22 lg:h-26 w-auto object-contain drop-shadow-[0_8px_24px_rgba(0,0,0,0.25)]"
+          />
+        </div>
+
+        {/* 🌟 TIPOGRAFI PERJALANAN KAMI 🌟 */}
+        <h2 className="story-main-title max-w-6xl text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[88px] 2xl:text-[104px] font-black leading-[1.08] tracking-tighter text-white text-balance flex flex-wrap justify-center gap-x-[0.24em] gap-y-[0.04em]">
           {WORDS.map((word, idx) => (
             <span
               key={idx}
