@@ -73,7 +73,7 @@ export function DirectGrabSection() {
     <section
       ref={sectionRef}
       id="direct-grab"
-      className="relative z-10 flex h-screen min-h-screen w-full flex-col justify-between items-center overflow-hidden bg-[#F8FAF9] dark:bg-[#07160D] text-[#0A1A12] dark:text-white py-12 md:py-16 px-6 md:px-12 select-none transition-colors duration-300"
+      className="relative z-10 flex min-h-screen min-h-[100dvh] w-full flex-col justify-between items-center overflow-hidden bg-[#F8FAF9] dark:bg-[#07160D] text-[#0A1A12] dark:text-white py-10 sm:py-14 md:py-16 px-4 sm:px-6 md:px-12 select-none transition-colors duration-300"
     >
       {/* Dynamic Ambient Background Glow */}
       <div className="pointer-events-none absolute left-1/2 top-1/2 h-[650px] w-[650px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/10 dark:bg-primary/15 blur-[150px]" />
@@ -91,7 +91,7 @@ export function DirectGrabSection() {
       {/* Main Center Content Container */}
       <div className="relative mx-auto flex w-full max-w-4xl flex-col items-center justify-center text-center z-20 my-auto">
         {/* Grab Official Logo */}
-        <div className="direct-logo relative flex items-center justify-center mb-6 group cursor-pointer">
+        <div className="direct-logo relative flex items-center justify-center mb-4 sm:mb-6 group cursor-pointer">
           <div className="pointer-events-none absolute inset-0 -m-8 rounded-full bg-primary/20 blur-3xl transition-opacity duration-300 group-hover:opacity-100" />
           <Image
             src="/images/assets_grab/grab_logo.png"
@@ -99,29 +99,29 @@ export function DirectGrabSection() {
             width={340}
             height={130}
             priority
-            className="h-16 sm:h-20 md:h-24 w-auto object-contain drop-shadow-[0_12px_30px_rgba(0,177,79,0.3)] transition-transform duration-300 group-hover:scale-105"
+            className="h-12 sm:h-16 md:h-20 lg:h-24 w-auto object-contain drop-shadow-[0_12px_30px_rgba(0,177,79,0.3)] transition-transform duration-300 group-hover:scale-105"
           />
         </div>
 
         {/* Headline */}
-        <h2 className="direct-title text-3xl sm:text-5xl md:text-6xl font-black tracking-tight text-[#0A1A12] dark:text-white leading-tight">
+        <h2 className="direct-title text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-[#0A1A12] dark:text-white leading-tight">
           Mulai Perjalanan Anda <br />
           Bersama <span className="text-primary bg-gradient-to-r from-[#00B14F] to-emerald-500 bg-clip-text text-transparent">Grab Indonesia</span>
         </h2>
 
         {/* Description */}
-        <p className="direct-desc mt-4 max-w-xl text-sm sm:text-base text-[#5B6B62] dark:text-white/70 leading-relaxed font-medium">
+        <p className="direct-desc mt-3 sm:mt-4 max-w-xl text-xs sm:text-sm md:text-base text-[#5B6B62] dark:text-white/70 leading-relaxed font-medium">
           Dapatkan kemudahan layanan transportasi harian, pesan-antar makanan lezat, pengiriman instan, dan pembayaran digital terpercaya dalam satu aplikasi.
         </p>
 
         {/* 🌟 DIRECT CTA BUTTONS (Direct to https://www.grab.com/id/) 🌟 */}
-        <div className="direct-cta-buttons mt-9 flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-md">
+        <div className="direct-cta-buttons mt-6 sm:mt-9 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full max-w-md">
           {/* Primary Official Website Link Button */}
           <a
             href="https://www.grab.com/id/"
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative flex w-full sm:w-auto items-center justify-center gap-2.5 rounded-full bg-primary px-8 py-4 text-sm sm:text-base font-extrabold text-white shadow-[0_10px_35px_rgba(0,177,79,0.35)] transition-all duration-300 hover:scale-105 hover:bg-emerald-600 hover:shadow-[0_15px_45px_rgba(0,177,79,0.55)] active:scale-95 cursor-pointer"
+            className="group relative flex w-full sm:w-auto items-center justify-center gap-2.5 rounded-full bg-primary px-6 sm:px-8 py-3.5 sm:py-4 text-xs sm:text-sm md:text-base font-extrabold text-white shadow-[0_10px_35px_rgba(0,177,79,0.35)] transition-all duration-300 hover:scale-105 hover:bg-emerald-600 hover:shadow-[0_15px_45px_rgba(0,177,79,0.55)] active:scale-95 cursor-pointer"
           >
             <span>Kunjungi grab.com/id</span>
             <ExternalLink className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -132,7 +132,7 @@ export function DirectGrabSection() {
             href="https://www.grab.com/id/download/"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex w-full sm:w-auto items-center justify-center gap-2 rounded-full border border-black/10 dark:border-white/20 bg-white dark:bg-white/5 px-7 py-4 text-sm sm:text-base font-bold text-[#0A1A12] dark:text-white shadow-xs backdrop-blur-xl transition-all duration-300 hover:border-primary/50 hover:bg-primary/5 hover:text-primary active:scale-95 cursor-pointer"
+            className="flex w-full sm:w-auto items-center justify-center gap-2 rounded-full border border-black/10 dark:border-white/20 bg-white dark:bg-white/5 px-6 sm:px-7 py-3.5 sm:py-4 text-xs sm:text-sm md:text-base font-bold text-[#0A1A12] dark:text-white shadow-xs backdrop-blur-xl transition-all duration-300 hover:border-primary/50 hover:bg-primary/5 hover:text-primary active:scale-95 cursor-pointer"
           >
             <Smartphone className="h-4 w-4" />
             <span>Unduh Aplikasi</span>

@@ -163,16 +163,16 @@ export function Navbar() {
       {/* 🌟 GSAP DRIVEN FLUID FLOATING NAVBAR */}
       <div
         ref={navContainerRef}
-        className="pointer-events-auto fixed md:fixed bottom-8 left-1/2 -translate-x-1/2 md:translate-x-0 w-max max-w-[96vw] md:max-w-none will-change-[transform,left,top]"
+        className="pointer-events-auto fixed md:fixed bottom-4 sm:bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 md:translate-x-0 w-max max-w-[96vw] md:max-w-none will-change-[transform,left,top]"
       >
         <div
           className={cn(
             'flex items-center justify-between border border-black/10 bg-white/95 shadow-[0_18px_45px_rgba(0,0,0,0.18)] backdrop-blur-2xl dark:border-white/15 dark:bg-[#0A1A12]/95 transition-all duration-700 ease-[cubic-bezier(0.19,1,0.22,1)]',
             isHero
-              ? 'md:flex-col md:items-center md:gap-4 md:p-3.5 md:rounded-[32px]'
-              : 'md:flex-row md:items-center md:gap-3 md:px-5 md:py-2.5 md:rounded-full',
-            // Mobile
-            'p-2 rounded-full'
+              ? 'md:flex-col md:items-center md:gap-3 md:p-3 md:rounded-[32px]'
+              : 'md:flex-row md:items-center md:gap-2.5 md:px-4 md:py-2 md:rounded-full',
+            // Mobile & Tablet
+            'p-1.5 sm:p-2 rounded-full gap-1'
           )}
         >
           {/* LOGO */}
@@ -180,23 +180,23 @@ export function Navbar() {
             type="button"
             onClick={scrollToTop}
             title="Kembali ke atas"
-            className="flex items-center gap-2 transition hover:scale-105 active:scale-95"
+            className="flex items-center gap-2 transition hover:scale-105 active:scale-95 shrink-0"
           >
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-base font-black text-white shadow-md shadow-primary/30">
+            <span className="flex h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 items-center justify-center rounded-full bg-primary text-xs sm:text-sm md:text-base font-black text-white shadow-md shadow-primary/30">
               G
             </span>
             {!isHero && (
-              <span className="hidden lg:inline text-base font-black tracking-tight text-on-surface animate-in fade-in duration-500">
+              <span className="hidden xl:inline text-base font-black tracking-tight text-on-surface animate-in fade-in duration-500">
                 Grab
               </span>
             )}
           </button>
 
-          {/* SECTION NAV ITEMS - Non-scrollable unified pill */}
+          {/* SECTION NAV ITEMS - Horizontal scroll safe on narrow screens */}
           <nav
             className={cn(
-              'flex items-center gap-1 transition-all duration-500 flex-nowrap shrink-0',
-              isHero ? 'md:flex-col md:gap-2' : 'md:flex-row md:gap-1.5'
+              'flex items-center gap-0.5 sm:gap-1 transition-all duration-500 flex-nowrap shrink-0 max-w-[70vw] sm:max-w-none overflow-x-auto no-scrollbar py-0.5',
+              isHero ? 'md:flex-col md:gap-2 md:max-w-none md:overflow-visible' : 'md:flex-row md:gap-1'
             )}
           >
             {NAV_SECTIONS.map((item) => {
@@ -210,20 +210,20 @@ export function Navbar() {
                   title={item.label}
                   onClick={() => handleNavClick(item.href)}
                   className={cn(
-                    'group relative flex items-center gap-2 rounded-full transition-all duration-300',
+                    'group relative flex items-center gap-1.5 rounded-full transition-all duration-300 shrink-0',
                     isHero
-                      ? 'p-2.5 md:p-3 text-xs font-bold'
-                      : 'px-3.5 py-1.5 text-xs font-bold',
+                      ? 'p-2 sm:p-2.5 md:p-3 text-xs font-bold'
+                      : 'px-2.5 py-1.5 sm:px-3 sm:py-1.5 text-xs font-bold',
                     isCurrentActive
                       ? 'bg-primary text-white shadow-sm shadow-primary/25 scale-105'
                       : 'text-on-surface-variant hover:bg-black/5 hover:text-on-surface hover:scale-105 dark:hover:bg-white/10 dark:hover:text-white'
                   )}
                 >
-                  <Icon className="h-4 w-4 shrink-0 transition-transform duration-300 group-hover:scale-110" />
+                  <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0 transition-transform duration-300 group-hover:scale-110" />
                   
-                  {/* Text Label: Tampil di bottom bar desktop, atau hover tooltip di sidebar kiri */}
+                  {/* Text Label: Tampil di bottom bar desktop besar, atau hover tooltip di sidebar kiri */}
                   {!isHero ? (
-                    <span className="hidden sm:inline whitespace-nowrap animate-in fade-in duration-400">{item.label}</span>
+                    <span className="hidden md:inline whitespace-nowrap text-xs animate-in fade-in duration-400">{item.label}</span>
                   ) : (
                     <span className="pointer-events-none absolute left-full ml-3 hidden whitespace-nowrap rounded-xl bg-[#0A1A12] px-3 py-1.5 text-xs font-bold text-white shadow-xl md:group-hover:inline animate-in fade-in duration-200">
                       {item.label}
@@ -235,22 +235,22 @@ export function Navbar() {
           </nav>
 
           {/* TOMBOL JELAJAHI */}
-          <div className={cn('flex items-center transition-all duration-500', isHero ? 'md:pt-1' : '')}>
+          <div className={cn('flex items-center transition-all duration-500 shrink-0', isHero ? 'md:pt-1' : '')}>
             <button
               type="button"
               onClick={() => handleNavClick(isHero ? '#about' : '#journey-trigger')}
               className={cn(
                 'group relative flex items-center justify-center rounded-full bg-primary text-white shadow-md shadow-primary/25 transition-all duration-300 hover:bg-emerald-600 hover:scale-110 active:scale-95 cursor-pointer',
                 isHero
-                  ? 'h-9 w-9 md:h-10 md:w-10 p-0'
-                  : 'px-4 py-2 text-xs font-black'
+                  ? 'h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 p-0'
+                  : 'px-3 py-1.5 sm:px-4 sm:py-2 text-[11px] sm:text-xs font-black'
               )}
               title={isHero ? 'Jelajahi Section' : 'Kembali ke Live Journey'}
               aria-label={isHero ? 'Jelajahi Section' : 'Kembali ke Live Journey'}
             >
               {isHero ? (
                 <>
-                  <Compass className="h-4 w-4 md:h-5 md:w-5 transition-transform duration-300 group-hover:rotate-45" />
+                  <Compass className="h-3.5 w-3.5 sm:h-4 sm:w-4 md:h-5 md:w-5 transition-transform duration-300 group-hover:rotate-45" />
                   {/* Tooltip on hover */}
                   <span className="pointer-events-none absolute left-full ml-3 hidden whitespace-nowrap rounded-xl bg-[#0A1A12] px-3 py-1.5 text-xs font-bold text-white shadow-xl md:group-hover:inline animate-in fade-in duration-200">
                     Jelajahi
@@ -264,19 +264,19 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* 🌙 FLOATING DARK / LIGHT MODE CONTROLLER DI POJOK KANAN BAWAH ☀️ */}
-      <div className="pointer-events-auto fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50">
+      {/* 🌙 FLOATING DARK / LIGHT MODE CONTROLLER (Ditaruh Agak Naik ke Atas) ☀️ */}
+      <div className="pointer-events-auto fixed bottom-20 right-4 sm:bottom-24 sm:right-6 md:bottom-24 md:right-8 z-50">
         <button
           type="button"
           onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
           title={theme === 'light' ? 'Beralih ke Mode Gelap' : 'Beralih ke Mode Terang'}
           aria-label={theme === 'light' ? 'Beralih ke Mode Gelap' : 'Beralih ke Mode Terang'}
-          className="group flex h-11 w-11 md:h-12 md:w-12 items-center justify-center rounded-full border border-black/10 dark:border-white/15 bg-white/95 dark:bg-[#0E1A13]/95 text-[#0A1A12] dark:text-white shadow-[0_8px_30px_rgba(0,0,0,0.14)] backdrop-blur-xl transition-all duration-300 hover:scale-110 hover:border-primary/50 hover:shadow-primary/20 active:scale-95 cursor-pointer"
+          className="group flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-black/10 dark:border-white/15 bg-white/95 dark:bg-[#0E1A13]/95 text-[#0A1A12] dark:text-white shadow-[0_10px_35px_rgba(0,0,0,0.18)] backdrop-blur-xl transition-all duration-300 hover:scale-110 hover:border-primary/50 hover:shadow-primary/20 active:scale-95 cursor-pointer"
         >
           {theme === 'light' ? (
-            <Moon className="h-5 w-5 transition-transform duration-300 group-hover:-rotate-12 text-[#0A1A12]" />
+            <Moon className="h-4 w-4 sm:h-5 sm:w-5 transition-transform duration-300 group-hover:-rotate-12 text-[#0A1A12]" />
           ) : (
-            <Sun className="h-5 w-5 transition-transform duration-300 group-hover:rotate-45 text-amber-400" />
+            <Sun className="h-4 w-4 sm:h-5 sm:w-5 transition-transform duration-300 group-hover:rotate-45 text-amber-400" />
           )}
         </button>
       </div>

@@ -461,7 +461,7 @@ export function ServicesSphereSection() {
           </div>
 
           {/* Filter Pills & Replay Button */}
-          <div className="flex items-center gap-1.5 flex-wrap">
+          <div className="flex items-center gap-1 sm:gap-1.5 flex-wrap">
             {CATEGORIES.map((cat) => (
               <button
                 key={cat.key}
@@ -471,7 +471,7 @@ export function ServicesSphereSection() {
                   setDropTriggerKey((prev) => prev + 1);
                 }}
                 className={cn(
-                  'sphere-filter-btn rounded-full px-4 py-1.5 text-xs font-bold transition-all duration-300 cursor-pointer',
+                  'sphere-filter-btn rounded-full px-3 py-1 sm:px-4 sm:py-1.5 text-[11px] sm:text-xs font-bold transition-all duration-300 cursor-pointer',
                   activeFilter === cat.key
                     ? 'bg-primary text-white shadow-md shadow-primary/30 scale-105'
                     : 'bg-white dark:bg-[#0E1A13] text-[#5B6B62] dark:text-gray-300 border border-black/8 dark:border-white/10 hover:border-primary/40 hover:text-[#0A1A12] dark:hover:text-white'
@@ -486,7 +486,7 @@ export function ServicesSphereSection() {
               onClick={handleReplayDrop}
               title="Jatuhkan Ulang Lingkaran"
               aria-label="Jatuhkan Ulang Lingkaran"
-              className="p-2 rounded-full bg-white dark:bg-[#0E1A13] text-[#0A1A12] dark:text-white border border-black/8 dark:border-white/10 hover:bg-primary hover:text-white hover:border-primary transition-all cursor-pointer shadow-xs"
+              className="p-1.5 sm:p-2 rounded-full bg-white dark:bg-[#0E1A13] text-[#0A1A12] dark:text-white border border-black/8 dark:border-white/10 hover:bg-primary hover:text-white hover:border-primary transition-all cursor-pointer shadow-xs"
             >
               <RotateCcw className="h-3.5 w-3.5" />
             </button>
@@ -497,10 +497,10 @@ export function ServicesSphereSection() {
         <div
           key={dropTriggerKey}
           ref={containerRef}
-          className="relative w-full my-auto min-h-[420px] md:min-h-[480px] flex items-center justify-center py-8"
+          className="relative w-full my-auto min-h-[360px] sm:min-h-[420px] md:min-h-[480px] flex items-center justify-center py-4 sm:py-8"
         >
           {/* Circular Stack Grid */}
-          <div className="w-full max-w-5xl mx-auto flex flex-wrap items-center justify-center gap-5 sm:gap-7 lg:gap-9 p-4">
+          <div className="w-full max-w-5xl mx-auto flex flex-wrap items-center justify-center gap-3 sm:gap-5 md:gap-7 lg:gap-8 p-2 sm:p-4">
             {filteredServices.map((service) => {
               const Icon = service.icon;
               const isSelected = selectedService?.id === service.id;
@@ -518,7 +518,7 @@ export function ServicesSphereSection() {
                   {/* Floating Circular Tech Ball */}
                   <div
                     className={cn(
-                      'relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full flex flex-col items-center justify-center p-2 transition-all duration-300 border-2',
+                      'relative w-[72px] h-[72px] sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full flex flex-col items-center justify-center p-1.5 sm:p-2 transition-all duration-300 border-2',
                       isSelected
                         ? 'bg-primary text-white border-primary shadow-xl shadow-primary/40 scale-110 ring-4 ring-primary/30'
                         : 'bg-white dark:bg-[#0E1A13] text-[#0A1A12] dark:text-white border-black/8 dark:border-white/10 shadow-md group-hover:border-primary group-hover:shadow-xl'
@@ -530,24 +530,24 @@ export function ServicesSphereSection() {
                     {/* Icon */}
                     <div
                       className={cn(
-                        'relative z-10 flex h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 items-center justify-center rounded-full mb-1 transition-transform duration-300 group-hover:scale-110',
+                        'relative z-10 flex h-7 w-7 sm:h-8 sm:w-8 md:h-9 md:w-9 lg:h-10 lg:w-10 items-center justify-center rounded-full mb-0.5 sm:mb-1 transition-transform duration-300 group-hover:scale-110',
                         isSelected
                           ? 'bg-white/20 text-white'
                           : 'bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white'
                       )}
                     >
-                      <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
+                      <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4 md:h-5 md:w-5" />
                     </div>
 
                     {/* Service Name */}
-                    <span className="relative z-10 text-[10px] sm:text-[11px] md:text-xs font-black tracking-tight text-center truncate max-w-[90%]">
+                    <span className="relative z-10 text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs font-black tracking-tight text-center truncate max-w-[90%]">
                       {service.name}
                     </span>
 
                     {/* Brand Badge */}
                     <span
                       className={cn(
-                        'absolute -bottom-2 font-mono-tag text-[8px] sm:text-[9px] font-black px-2 py-0.5 rounded-full border shadow-xs transition-colors',
+                        'absolute -bottom-2 font-mono-tag text-[7px] sm:text-[8px] md:text-[9px] font-black px-1.5 sm:px-2 py-0.5 rounded-full border shadow-xs transition-colors',
                         isSelected
                           ? 'bg-white text-primary border-primary'
                           : 'bg-primary text-white border-white dark:border-[#0E1A13]'
@@ -558,7 +558,7 @@ export function ServicesSphereSection() {
                   </div>
 
                   {/* Soft Floor Shadow under ball */}
-                  <div className="w-14 sm:w-18 h-2 bg-black/10 dark:bg-white/10 rounded-full blur-[2px] mt-3 group-hover:scale-75 group-hover:opacity-40 transition-all duration-300" />
+                  <div className="w-12 sm:w-16 md:w-18 h-1.5 sm:h-2 bg-black/10 dark:bg-white/10 rounded-full blur-[2px] mt-2.5 sm:mt-3 group-hover:scale-75 group-hover:opacity-40 transition-all duration-300" />
                 </div>
               );
             })}
@@ -566,17 +566,17 @@ export function ServicesSphereSection() {
 
           {/* 🌟 INTERACTIVE MODAL / POPOVER CARD ON CLICK 🌟 */}
           {selectedService && (
-            <div className="absolute z-50 bottom-2 sm:bottom-4 max-w-lg w-[92%] p-5 rounded-3xl bg-white dark:bg-[#0E1A13] border border-primary/30 shadow-[0_20px_50px_rgba(0,0,0,0.18)] backdrop-blur-2xl flex flex-col justify-between animate-in fade-in zoom-in-95 duration-300">
+            <div className="absolute z-50 bottom-2 sm:bottom-4 max-w-lg w-[95%] sm:w-[90%] p-4 sm:p-5 rounded-3xl bg-white dark:bg-[#0E1A13] border border-primary/30 shadow-[0_20px_50px_rgba(0,0,0,0.18)] backdrop-blur-2xl flex flex-col justify-between animate-in fade-in zoom-in-95 duration-300">
               <div className="flex items-center justify-between pb-3 border-b border-black/5 dark:border-white/10">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white shadow-md shadow-primary/30">
-                    <selectedService.icon className="h-5 w-5" />
+                  <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-primary text-white shadow-md shadow-primary/30 shrink-0">
+                    <selectedService.icon className="h-4 w-4 sm:h-5 sm:w-5" />
                   </div>
                   <div>
-                    <h4 className="text-base font-black text-[#0A1A12] dark:text-white">
+                    <h4 className="text-sm sm:text-base font-black text-[#0A1A12] dark:text-white">
                       {selectedService.name} • <span className="text-primary">{selectedService.brandBadge}</span>
                     </h4>
-                    <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#5B6B62] dark:text-gray-400">
+                    <span className="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider text-[#5B6B62] dark:text-gray-400">
                       {selectedService.categoryLabel}
                     </span>
                   </div>
@@ -592,12 +592,12 @@ export function ServicesSphereSection() {
                 </button>
               </div>
 
-              <p className="text-xs sm:text-sm text-[#334155] dark:text-gray-300 mt-3 leading-relaxed">
+              <p className="text-xs sm:text-sm text-[#334155] dark:text-gray-300 mt-2.5 sm:mt-3 leading-relaxed">
                 {selectedService.desc}
               </p>
 
               {/* Highlights Checklist */}
-              <div className="mt-3 space-y-1.5 bg-[#F8FAF9] dark:bg-black/30 p-3 rounded-2xl border border-black/5 dark:border-white/5">
+              <div className="mt-2.5 sm:mt-3 space-y-1.5 bg-[#F8FAF9] dark:bg-black/30 p-2.5 sm:p-3 rounded-2xl border border-black/5 dark:border-white/5">
                 {selectedService.highlights.map((item, i) => (
                   <div key={i} className="flex items-center gap-2 text-xs font-semibold text-[#0A1A12] dark:text-gray-200">
                     <CheckCircle2 className="h-3.5 w-3.5 text-primary shrink-0" />
