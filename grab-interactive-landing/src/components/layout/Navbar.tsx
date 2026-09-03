@@ -10,6 +10,10 @@ import {
   ShieldCheck,
   Calendar,
   Sparkles,
+  Sun,
+  Moon,
+  Compass,
+  ExternalLink,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -22,13 +26,25 @@ const NAV_SECTIONS = [
   { id: 'perjalanan-kami', label: 'Perjalanan Kami', icon: Layers, href: '#perjalanan-kami' },
   { id: 'layanan-ekosistem', label: 'Layanan & Fitur', icon: Sparkles, href: '#layanan-ekosistem' },
   { id: 'nilai-keamanan', label: 'Nilai & Keamanan', icon: ShieldCheck, href: '#nilai-keamanan' },
+  { id: 'direct-grab', label: 'Mulai Grab', icon: ExternalLink, href: '#direct-grab' },
 ];
 
 export function Navbar() {
   const [activeSection, setActiveSection] = useState<string>('journey-trigger');
   const [isHero, setIsHero] = useState<boolean>(true);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const navContainerRef = useRef<HTMLDivElement>(null);
   const isFirstRender = useRef(true);
+
+  // Sync theme with html[data-theme] and html.dark class
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [theme]);
 
   // GSAP Smooth Flight Animation antar posisi Kiri & Bawah
   useEffect(() => {
@@ -218,23 +234,51 @@ export function Navbar() {
             })}
           </nav>
 
-          {/* TOMBOL JELAJAHI (Tanpa Tanda Panah) */}
+          {/* TOMBOL JELAJAHI */}
           <div className={cn('flex items-center transition-all duration-500', isHero ? 'md:pt-1' : '')}>
             <button
               type="button"
               onClick={() => handleNavClick(isHero ? '#about' : '#journey-trigger')}
               className={cn(
-                'flex items-center justify-center rounded-full bg-primary text-xs font-black text-white shadow-md shadow-primary/25 transition-all duration-300 hover:bg-emerald-600 hover:scale-105 active:scale-95',
+                'group relative flex items-center justify-center rounded-full bg-primary text-white shadow-md shadow-primary/25 transition-all duration-300 hover:bg-emerald-600 hover:scale-110 active:scale-95 cursor-pointer',
                 isHero
-                  ? 'px-3 py-1.5 text-[11px]'
-                  : 'px-4 py-2'
+                  ? 'h-9 w-9 md:h-10 md:w-10 p-0'
+                  : 'px-4 py-2 text-xs font-black'
               )}
               title={isHero ? 'Jelajahi Section' : 'Kembali ke Live Journey'}
+              aria-label={isHero ? 'Jelajahi Section' : 'Kembali ke Live Journey'}
             >
-              <span>Jelajahi</span>
+              {isHero ? (
+                <>
+                  <Compass className="h-4 w-4 md:h-5 md:w-5 transition-transform duration-300 group-hover:rotate-45" />
+                  {/* Tooltip on hover */}
+                  <span className="pointer-events-none absolute left-full ml-3 hidden whitespace-nowrap rounded-xl bg-[#0A1A12] px-3 py-1.5 text-xs font-bold text-white shadow-xl md:group-hover:inline animate-in fade-in duration-200">
+                    Jelajahi
+                  </span>
+                </>
+              ) : (
+                <span>Jelajahi</span>
+              )}
             </button>
           </div>
         </div>
+      </div>
+
+      {/* 🌙 FLOATING DARK / LIGHT MODE CONTROLLER DI POJOK KANAN BAWAH ☀️ */}
+      <div className="pointer-events-auto fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50">
+        <button
+          type="button"
+          onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+          title={theme === 'light' ? 'Beralih ke Mode Gelap' : 'Beralih ke Mode Terang'}
+          aria-label={theme === 'light' ? 'Beralih ke Mode Gelap' : 'Beralih ke Mode Terang'}
+          className="group flex h-11 w-11 md:h-12 md:w-12 items-center justify-center rounded-full border border-black/10 dark:border-white/15 bg-white/95 dark:bg-[#0E1A13]/95 text-[#0A1A12] dark:text-white shadow-[0_8px_30px_rgba(0,0,0,0.14)] backdrop-blur-xl transition-all duration-300 hover:scale-110 hover:border-primary/50 hover:shadow-primary/20 active:scale-95 cursor-pointer"
+        >
+          {theme === 'light' ? (
+            <Moon className="h-5 w-5 transition-transform duration-300 group-hover:-rotate-12 text-[#0A1A12]" />
+          ) : (
+            <Sun className="h-5 w-5 transition-transform duration-300 group-hover:rotate-45 text-amber-400" />
+          )}
+        </button>
       </div>
     </header>
   );

@@ -12,6 +12,7 @@ import { CenterTimelineSection } from '@/components/sections/CenterTimelineSecti
 import { JourneyStorySection } from '@/components/sections/JourneyStorySection';
 import { ServicesSphereSection } from '@/components/sections/ServicesSphereSection';
 import { ValuesEcosystemSection } from '@/components/sections/ValuesEcosystemSection';
+import { DirectGrabSection } from '@/components/sections/DirectGrabSection';
 import { LoadingScreen } from '@/components/layout/LoadingScreen';
 import { Navbar } from '@/components/layout/Navbar';
 
@@ -75,6 +76,7 @@ export default function HomePage() {
         <JourneyStorySection />
         <ServicesSphereSection />
         <ValuesEcosystemSection />
+        <DirectGrabSection />
       </main>
     </>
   );

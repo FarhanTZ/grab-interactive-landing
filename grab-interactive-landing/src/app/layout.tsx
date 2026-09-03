@@ -59,7 +59,6 @@ export default function RootLayout({
       <body>
         <RootProvider>
           {children}
-          <AccessibilityController />
         </RootProvider>
       </body>
     </html>

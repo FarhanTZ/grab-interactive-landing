@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
+import { motion, useScroll, useSpring } from 'framer-motion';
 import {
   MapPinned,
   Flag,
@@ -13,6 +14,8 @@ import {
   Calendar,
   Sparkles,
   Award,
+  Building2,
+  CreditCard,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -40,43 +43,43 @@ const TIMELINE_STEPS = [
     watermark: '2016',
   },
   {
-    index: '03',
     year: '2018',
-    icon: Layers,
-    tag: 'Ekosistem Terpadu',
-    title: 'Transformasi Menjadi Superapp Harian',
-    location: 'Seluruh Asia Tenggara',
-    desc: 'Mengakuisisi operasional Uber di Asia Tenggara dan mengintegrasikan layanan pengantaran makanan (GrabFood), kurir logistik instan (GrabExpress), dan dompet digital (GrabPay) dalam satu aplikasi serbabisa.',
-    achievements: ['Akuisisi bisnis Uber SEA', 'Peluncuran GrabFood & GrabExpress', 'Transformasi resmi menjadi Everyday Superapp'],
+    index: '03',
+    tag: 'Superapp & GrabFood',
+    icon: Globe2,
+    title: 'Akuisisi Uber & Lahirnya GrabFood',
+    location: 'Ekspansi Regional',
+    desc: 'Langkah historis mengakuisisi operasional Uber di Asia Tenggara, mempercepat peluncuran GrabFood dan GrabFinancial menjadi Everyday Superapp.',
+    achievements: ['Akuisisi bisnis Uber di Asia Tenggara', 'Peluncuran GrabFood di ratusan kota', 'Integrasi dompet digital GrabPay & OVO'],
     watermark: '2018',
   },
   {
-    index: '04',
     year: '2021',
-    icon: TrendingUp,
-    tag: 'Pencapaian Global',
-    title: 'Melantai di Bursa Nasdaq Global',
-    location: 'New York Stock Exchange & Global',
-    desc: 'Grab resmi mencatatkan saham perdananya di bursa Nasdaq New York. Pencapaian ini memperkuat modal untuk investasi jangka panjang pada teknologi kecerdasan buatan (AI), keamanan data, dan inovasi pemetaan navigasi.',
-    achievements: ['Listing resmi di bursa NASDAQ (GRAB)', 'Investasi masif pada riset AI & GrabMaps', 'Membuka akses permodalan digital global'],
+    index: '04',
+    tag: 'IPO & Go Public',
+    icon: Building2,
+    title: 'Debut di Bursa Saham Nasdaq (GRAB)',
+    location: 'New York & Global',
+    desc: 'Pencatatan saham bersejarah di bursa Nasdaq New York. Menegaskan posisi Grab sebagai decacorn teknologi terdepan dari Asia Tenggara.',
+    achievements: ['Listing resmi di bursa NASDAQ (Ticker: GRAB)', 'Penawaran IPO terbesar dari Asia Tenggara', 'Valuasi mencapai status Decacorn Global'],
     watermark: '2021',
   },
   {
-    index: '05',
     year: '2024',
-    icon: Leaf,
-    tag: 'Inovasi Ramah Lingkungan',
-    title: 'Armada EV & Keberlanjutan Hijau',
-    location: '500+ Kota di 8 Negara',
-    desc: 'Mengoperasikan puluhan ribu armada kendaraan listrik ramah lingkungan (GrabElectric) dan meluncurkan algoritma AI Eco-Routing untuk menekan emisi karbon perkotaan demi masa depan yang lebih berkelanjutan.',
-    achievements: ['Puluhan ribu armada motor & mobil listrik EV', 'Integrasi AI Eco-Routing ramah lingkungan', 'Target nol emisi karbon jangka panjang'],
+    index: '05',
+    tag: 'Inovasi AI & Hijau',
+    icon: CreditCard,
+    title: 'Bank Digital & Inovasi AI Ramah Lingkungan',
+    location: 'Asia Tenggara',
+    desc: 'Peluncuran bank digital (SuperBank & GXBank), adopsi armada kendaraan listrik (EV) terbesar, serta AI cerdas untuk navigasi dan efisiensi pesanan.',
+    achievements: ['Peluncuran SuperBank & GXBank digital', 'Puluhan ribu armada motor & mobil listrik EV', 'Penerapan AI GenAI & GrabMaps Enterprise'],
     watermark: '2024',
   },
   {
+    year: 'MASA DEPAN',
     index: '06',
-    year: 'Sekarang',
-    icon: Globe2,
-    tag: 'Masa Depan Bersama',
+    tag: 'Ekosistem Terbesar',
+    icon: Sparkles,
     title: '38Juta+ Pengguna & Ekosistem Terbesar',
     location: 'Asia Tenggara',
     desc: 'Menghubungkan jutaan mitra pengemudi, merchant UMKM, dan konsumen dalam ekosistem digital terpercaya. Grab terus berinovasi untuk memberdayakan jutaan mata pencaharian dan memajukan perekonomian digital Asia Tenggara.',
@@ -88,6 +91,17 @@ const TIMELINE_STEPS = [
 export function CenterTimelineSection() {
   const containerRef = useRef<HTMLDivElement>(null);
 
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start center', 'end end'],
+  });
+
+  const smoothLineScale = useSpring(scrollYProgress, {
+    stiffness: 85,
+    damping: 26,
+    mass: 0.5,
+  });
+
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -98,16 +112,13 @@ export function CenterTimelineSection() {
     const ctx = gsap.context(() => {
       document.querySelectorAll<HTMLElement>('.timeline-fullscreen-step').forEach((sec, i) => {
         const isLeft = i % 2 === 0;
-        const line = sec.querySelector<HTMLElement>('.timeline-step-line-fill');
         const node = sec.querySelector<HTMLElement>('.timeline-step-node');
         const card = sec.querySelector<HTMLElement>('.timeline-step-card');
         const watermark = sec.querySelector<HTMLElement>('.timeline-step-watermark');
         const achievements = sec.querySelectorAll<HTMLElement>('.timeline-achieve-item');
 
-        // Setup Timeline PAUSED khusus untuk section tahun ini
         const tl = gsap.timeline({ paused: true });
 
-        // 1. Watermark zoom
         if (watermark) {
           tl.fromTo(
             watermark,
@@ -117,49 +128,35 @@ export function CenterTimelineSection() {
           );
         }
 
-        // 🟢 2. Garis Hijau Mengalir Turun Mulus dari Atas ke Bawah
-        if (line) {
-          tl.fromTo(
-            line,
-            { scaleY: 0 },
-            { scaleY: 1, transformOrigin: 'top center', duration: 1.0, ease: 'power2.inOut' },
-            0
-          );
-        }
-
-        // 3. Ikon Node Berputar 360° dan Membesar
         if (node) {
           tl.fromTo(
             node,
             { scale: 0, rotate: -180, opacity: 0 },
             { scale: 1, rotate: 0, opacity: 1, duration: 0.7, ease: 'back.out(2)' },
-            0.15
+            0.1
           );
         }
 
-        // 4. Kartu Tahun Meluncur Masuk dari Kiri / Kanan
         if (card) {
           tl.fromTo(
             card,
             { x: isLeft ? -90 : 90, opacity: 0, scale: 0.88 },
             { x: 0, opacity: 1, scale: 1, duration: 0.75, ease: 'back.out(1.4)' },
-            0.2
+            0.15
           );
         }
 
-        // 5. Poin Pencapaian Masuk Berurutan
         if (achievements.length > 0) {
           tl.fromTo(
             achievements,
             { x: 30, opacity: 0 },
             { x: 0, opacity: 1, duration: 0.5, stagger: 0.1, ease: 'power3.out' },
-            0.35
+            0.3
           );
         }
 
         timelines.set(sec, tl);
 
-        // 🎯 IntersectionObserver: play saat masuk, reverse saat keluar
         const obs = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
@@ -187,7 +184,15 @@ export function CenterTimelineSection() {
   }, []);
 
   return (
-    <div ref={containerRef} id="histori-perjalanan" className="relative w-full">
+    <div ref={containerRef} id="histori-perjalanan" className="relative w-full bg-[#F8FAF9]">
+      {/* 🟢 1. SATU GARIS PUSAT UTUH MENYAMBUNG DARI AWAL SAMPAI AKHIR SELURUH TIMELINE (Z-20 SELALU TERLIHAT) 🟢 */}
+      <div className="pointer-events-none absolute left-6 md:left-1/2 top-0 bottom-0 w-[4px] -translate-x-1/2 bg-black/10 z-20">
+        <motion.div
+          style={{ scaleY: smoothLineScale }}
+          className="absolute inset-0 origin-top bg-gradient-to-b from-[#00B14F] via-emerald-500 to-[#00B14F] shadow-[0_0_14px_rgba(0,177,79,0.8)]"
+        />
+      </div>
+
       {TIMELINE_STEPS.map((step, idx) => {
         const isLeft = idx % 2 === 0;
         const Icon = step.icon;
@@ -195,17 +200,8 @@ export function CenterTimelineSection() {
           <section
             key={step.year}
             id={`histori-${step.year.toLowerCase()}`}
-            className="timeline-fullscreen-step relative z-10 h-screen min-h-screen w-full overflow-hidden bg-[#F8FAF9] py-12 px-6 md:px-10 flex flex-col justify-center items-center select-none"
+            className="timeline-fullscreen-step relative z-10 h-screen min-h-screen w-full overflow-hidden bg-transparent py-12 px-6 md:px-10 flex flex-col justify-center items-center select-none"
           >
-            {/* 🟢 TRACK & GARIS HIJAU */}
-            <div className="pointer-events-none absolute left-6 md:left-1/2 top-0 bottom-0 w-[5px] -translate-x-1/2 rounded-full bg-black/10 z-10">
-              <div
-                className="timeline-step-line-fill absolute inset-0 origin-top rounded-full bg-gradient-to-b from-[#00B14F] via-emerald-500 to-[#00B14F] shadow-[0_0_12px_rgba(0,177,79,0.7)]"
-                style={{ transform: 'scaleY(0)' }}
-              />
-            </div>
-
-            {/* GIANT WATERMARK YEAR - SELANG SELING KANAN & KIRI */}
             <div
               className={cn(
                 'timeline-step-watermark pointer-events-none absolute top-1/2 -translate-y-1/2 select-none text-[140px] sm:text-[220px] md:text-[300px] lg:text-[350px] font-black tracking-tighter text-[#0A1A12] opacity-[0.06] leading-none whitespace-nowrap',
@@ -291,15 +287,6 @@ export function CenterTimelineSection() {
                 </div>
               </div>
             </div>
-
-            {/* BOTTOM NOTE FOR LAST STEP */}
-            {idx === TIMELINE_STEPS.length - 1 && (
-              <div className="mt-12 text-center z-20">
-                <div className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-5 py-2.5 text-xs font-bold text-[#0A1A12] shadow-sm">
-                  <Sparkles className="h-4 w-4 text-primary" /> Perjalanan terus berlanjut untuk jutaan masa depan cerah di Asia Tenggara
-                </div>
-              </div>
-            )}
           </section>
         );
       })}
