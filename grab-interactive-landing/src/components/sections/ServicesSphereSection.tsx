@@ -455,9 +455,6 @@ export function ServicesSphereSection() {
         {/* HEADER & FILTER BAR */}
         <div className="sphere-section-header flex flex-col md:flex-row md:items-end justify-between pb-4 border-b border-black/8 dark:border-white/10 gap-4">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3.5 py-1 text-xs font-black tracking-widest text-primary shadow-sm mb-2">
-              <Sparkles className="h-3.5 w-3.5" /> 04 — EKOSISTEM LAYANAN
-            </div>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-[#0A1A12] dark:text-white">
               Fitur &amp; <span className="text-primary">Layanan Terpadu</span> Grab
             </h2>

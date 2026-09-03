@@ -71,16 +71,10 @@ export function ValuesEcosystemSection() {
       tl = gsap.timeline({ paused: true });
 
       tl.fromTo(
-        '.values-badge',
-        { y: 30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' }
+        '.values-heading',
+        { y: 40, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' }
       )
-        .fromTo(
-          '.values-heading',
-          { y: 40, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' },
-          '-=0.4'
-        )
         .fromTo(
           '.values-desc',
           { y: 30, opacity: 0 },
@@ -137,12 +131,9 @@ export function ValuesEcosystemSection() {
       <div className="relative mx-auto w-full max-w-[1280px] px-6 md:px-10">
         {/* HEADER */}
         <div className="values-header-box text-center">
-          <div className="values-badge inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-extrabold tracking-widest text-primary backdrop-blur-md">
-            <Sparkles className="h-4 w-4" /> 04 — PRINSIP & NILAI KAMI
-          </div>
-          <h2 className="values-heading mt-4 text-3xl font-extrabold leading-tight tracking-tight text-white md:text-5xl">
+          <h2 className="values-heading text-3xl font-extrabold leading-tight tracking-tight text-white md:text-5xl">
             Inovasi Berdampak Nyata bagi<br />
-            Masyarakat & Masa Depan
+            Masyarakat &amp; Masa Depan
           </h2>
           <p className="values-desc mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-white/70 md:text-base">
             Tiga pilar fundamental yang menggerakkan setiap baris kode, teknologi AI, dan operasional Grab di seluruh Asia Tenggara.

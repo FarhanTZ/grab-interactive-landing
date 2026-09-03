@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { ArrowDown, Sparkles } from 'lucide-react';
+import { ArrowDown } from 'lucide-react';
 
 export function TimelineTransitionSection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -17,24 +17,19 @@ export function TimelineTransitionSection() {
       tl = gsap.timeline({ paused: true });
 
       tl.fromTo(
-        '.transition-badge',
-        { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' }
+        '.transition-line',
+        { scaleY: 0 },
+        { scaleY: 1, duration: 0.9, ease: 'power2.inOut' },
+        0
       )
         .fromTo(
-          '.transition-line',
-          { scaleY: 0 },
-          { scaleY: 1, duration: 0.8, ease: 'power2.inOut' },
-          0.1
-        )
-        .fromTo(
           '.transition-title',
-          { y: 30, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' },
-          0.2
+          { y: 35, opacity: 0, scale: 0.95 },
+          { y: 0, opacity: 1, scale: 1, duration: 0.8, ease: 'back.out(1.5)' },
+          0.15
         )
         .fromTo(
-          '.transition-desc',
+          '.transition-prompt',
           { y: 20, opacity: 0 },
           { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' },
           0.3
@@ -88,30 +83,21 @@ export function TimelineTransitionSection() {
         />
       </div>
 
-      {/* Center Content Container */}
-      <div className="relative mx-auto flex w-full max-w-[800px] flex-col items-center justify-center text-center z-20">
-        {/* Badge Mono Tag */}
-        <div className="transition-badge inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-black tracking-widest text-primary shadow-sm mb-6">
-          <Sparkles className="h-3.5 w-3.5" /> 03 — DOKUMENTASI HISTORI
-        </div>
-
+      {/* Center Content Container: Murni Judul & Scroll Prompt Saja */}
+      <div className="relative mx-auto flex w-full max-w-[900px] flex-col items-center justify-center text-center z-20">
         {/* Title */}
-        <h2 className="transition-title text-3xl sm:text-4xl md:text-5xl font-black text-[#0A1A12] dark:text-white tracking-tight leading-tight">
-          Menelusuri Perjalanan <span className="text-primary">2012 — Sekarang</span>
+        <h2 className="transition-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-[#0A1A12] dark:text-white tracking-tight leading-tight">
+          Menelusuri Perjalanan <br />
+          <span className="text-primary">2012 — Sekarang</span>
         </h2>
 
-        {/* Subtitle */}
-        <p className="transition-desc mt-4 text-sm sm:text-base text-black/60 dark:text-white/60 max-w-lg leading-relaxed font-medium">
-          Dari garasi kecil di Malaysia hingga menjadi platform teknologi serba bisa terbesar di Asia Tenggara.
-        </p>
-
         {/* Scroll Indicator Prompt */}
-        <div className="mt-10 flex flex-col items-center gap-2">
-          <span className="text-[11px] font-extrabold uppercase tracking-[0.25em] text-primary/80 animate-pulse">
+        <div className="transition-prompt mt-12 flex flex-col items-center gap-3">
+          <span className="text-xs sm:text-sm font-black uppercase tracking-[0.3em] text-primary/90 animate-pulse">
             Scroll untuk Menjelajah
           </span>
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white dark:bg-[#0F1D14] border border-primary/20 shadow-md text-primary animate-bounce">
-            <ArrowDown className="h-4 w-4" />
+          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white dark:bg-[#0F1D14] border-2 border-primary/30 shadow-lg text-primary animate-bounce">
+            <ArrowDown className="h-5 w-5" />
           </div>
         </div>
       </div>
