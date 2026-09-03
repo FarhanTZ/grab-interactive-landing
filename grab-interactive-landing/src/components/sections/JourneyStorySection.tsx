@@ -3,9 +3,6 @@
 import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const WORDS = [
   'Dari',
@@ -91,7 +88,7 @@ export function JourneyStorySection() {
       );
     }, section);
 
-    // 🎯 IntersectionObserver: Menjalankan animasi secara natural begitu tiba di layar
+    // 🎯 IntersectionObserver: Menjalankan animasi secara natural begitu tiba penuh di layar
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -102,7 +99,7 @@ export function JourneyStorySection() {
           }
         });
       },
-      { threshold: 0.2 }
+      { threshold: 0.35 }
     );
 
     observer.observe(section);
