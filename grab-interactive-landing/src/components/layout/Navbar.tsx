@@ -17,7 +17,7 @@ gsap.registerPlugin(ScrollTrigger);
 const NAV_SECTIONS = [
   { id: 'journey-trigger', label: 'Perjalanan Live', icon: MapPin, href: '#journey-trigger' },
   { id: 'about', label: 'Tentang Grab', icon: Building2, href: '#about' },
-  { id: 'perjalanan-kami', label: 'Layanan & Rute', icon: Layers, href: '#perjalanan-kami' },
+  { id: 'perjalanan-kami', label: 'Perjalanan Kami', icon: Layers, href: '#perjalanan-kami' },
   { id: 'nilai-keamanan', label: 'Nilai & Keamanan', icon: ShieldCheck, href: '#nilai-keamanan' },
   { id: 'histori-perjalanan', label: 'Histori Perjalanan', icon: Calendar, href: '#histori-perjalanan' },
 ];
