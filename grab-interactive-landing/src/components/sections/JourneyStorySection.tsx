@@ -28,10 +28,16 @@ export function JourneyStorySection() {
     if (!section) return;
 
     let tl: gsap.core.Timeline | null = null;
+    let isReadyForHover = false;
 
     const ctx = gsap.context(() => {
-      // Timeline animasi kata jatuh 1 per 1 saat scroll
-      tl = gsap.timeline({ paused: true });
+      // Timeline animasi kata jatuh 1 per 1 tepat saat masuk ke dalam section
+      tl = gsap.timeline({
+        paused: true,
+        onComplete: () => {
+          isReadyForHover = true;
+        },
+      });
 
       tl.fromTo(
         '.falling-word',
@@ -39,7 +45,7 @@ export function JourneyStorySection() {
           y: -140,
           opacity: 0,
           scale: 1.18,
-          rotate: (i) => (i % 2 === 0 ? -8 : 8),
+          rotate: (i: number) => (i % 2 === 0 ? -8 : 8),
         },
         {
           y: 0,
@@ -53,24 +59,30 @@ export function JourneyStorySection() {
       );
     }, section);
 
-    // IntersectionObserver: memutar animasi saat section di-scroll masuk ke layar
+    // 🎯 IntersectionObserver dengan rootMargin lebar agar langsung aktif begitu mendekati section
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             tl?.play();
           } else {
+            isReadyForHover = false;
             tl?.reverse();
           }
         });
       },
-      { threshold: 0.25 }
+      {
+        threshold: 0.1,
+        rootMargin: '50px 0px 50px 0px',
+      }
     );
 
     observer.observe(section);
 
     // 🌟 Efek Interaktif Kursor: Ketika didekati, teks menghilang / memudar / melayang (Dissolve & Scatter)
     const handleMouseMove = (e: MouseEvent) => {
+      if (!isReadyForHover) return;
+
       const sectionRect = section.getBoundingClientRect();
       if (sectionRect.top > window.innerHeight || sectionRect.bottom < 0) return;
 
@@ -123,6 +135,8 @@ export function JourneyStorySection() {
     };
 
     const handleMouseLeave = () => {
+      if (!isReadyForHover) return;
+
       wordsRef.current.forEach((wordEl) => {
         if (!wordEl) return;
         gsap.to(wordEl, {
