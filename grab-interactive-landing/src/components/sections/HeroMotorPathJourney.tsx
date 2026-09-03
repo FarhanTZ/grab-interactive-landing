@@ -32,12 +32,10 @@ export function HeroMotorPathJourney() {
           trigger: containerRef.current,
           start: 'top top',
           end: '+=3000',
-          scrub: 1.2,
+          scrub: 0.8,
           pin: true,
           pinSpacing: true,
-          anticipatePin: 0,
-          fastScrollEnd: true,
-          preventOverlaps: true,
+          anticipatePin: 1,
           onUpdate: (self) => {
             const p = self.progress;
             useStore.getState().setMotorProgress(p);
